@@ -65,6 +65,9 @@ func InitOrderCmds() []*cobra.Command {
 	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
 	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
 
+	orderLeverageCmd.Flags().IntP("leverage", "l", 1, "leverage")
+	orderLeverageCmd.MarkFlagRequired("leverage")
+
 	orderCmd.AddCommand(orderListCmd, orderCreateCmd, orderCancelCmd, orderLeverageCmd)
 	return []*cobra.Command{orderCmd}
 }
