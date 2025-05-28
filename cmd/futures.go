@@ -12,5 +12,7 @@ var futuresCmd = &cobra.Command{
 
 func init() {
 	futuresCmd.AddCommand(futures.InitBalanceCmds()...)
+	futuresCmd.AddCommand(futures.InitOrderCmds()...)
+	futuresCmd.AddCommand(futures.InitBnbCmds()...)
 	RootCmd.AddCommand(futuresCmd)
 }
