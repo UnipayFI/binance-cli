@@ -20,3 +20,17 @@ func (a *BalanceList) Row() [][]any {
 	}
 	return rows
 }
+
+type OrderList []*futures.Order
+
+func (o *OrderList) Header() []string {
+	return []string{"Order ID", "Client Order ID", "Symbol", "Side", "Position Side", "Status", "Price", "Quantity", "Executed Quantity"}
+}
+
+func (o *OrderList) Row() [][]any {
+	rows := [][]any{}
+	for _, order := range *o {
+		rows = append(rows, []any{order.OrderID, order.ClientOrderID, order.Symbol, order.Side, order.PositionSide, order.Status, order.Price, order.OrigQuantity, order.ExecutedQuantity})
+	}
+	return rows
+}
