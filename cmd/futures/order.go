@@ -2,14 +2,15 @@ package futures
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/UnipayFI/binance-cli/common"
 	"github.com/UnipayFI/binance-cli/config"
 	"github.com/UnipayFI/binance-cli/exchange"
 	"github.com/UnipayFI/binance-cli/exchange/futures"
 	"github.com/UnipayFI/binance-cli/printer"
 	"github.com/spf13/cobra"
-	"log"
-	"os"
 )
 
 var (

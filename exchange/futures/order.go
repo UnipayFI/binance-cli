@@ -2,8 +2,9 @@ package futures
 
 import (
 	"context"
-	"github.com/adshao/go-binance/v2/futures"
 	"strings"
+
+	"github.com/adshao/go-binance/v2/futures"
 )
 
 func (c *Client) GetOrders(symbol string) (OrderList, error) {
