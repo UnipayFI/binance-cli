@@ -26,3 +26,5 @@ require (
 	github.com/stretchr/testify v1.10.0 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 )
+
+replace github.com/adshao/go-binance/v2 => github.com/UnipayFI/go-binance/v2 v2.0.0-20250607164144-28efb13ce065

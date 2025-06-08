@@ -14,7 +14,7 @@ var RootCmd = &cobra.Command{
 
 func init() {
 	initCommandConfig()
-	checkAPIKey()
+	// checkAPIKey()
 }
 
 func Execute() {
