@@ -37,3 +37,17 @@ func (o *OrderList) Row() [][]any {
 	}
 	return rows
 }
+
+type PositionList []*futures.AccountPosition
+
+func (p *PositionList) Header() []string {
+	return []string{"Symbol", "Position Side", "Position Amount", "Entry Price", "Unrealized Profit", "Leverage", "Update Time"}
+}
+
+func (p *PositionList) Row() [][]any {
+	rows := [][]any{}
+	for _, position := range *p {
+		rows = append(rows, []any{position.Symbol, position.PositionSide, position.PositionAmt, position.EntryPrice, position.UnrealizedProfit, position.Leverage, time.UnixMilli(position.UpdateTime).Format("2006-01-02 15:04:05")})
+	}
+	return rows
+}

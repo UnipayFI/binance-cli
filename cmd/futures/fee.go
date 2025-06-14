@@ -41,7 +41,7 @@ func InitFeeCmds() []*cobra.Command {
 
 func feeBurnStatus(cmd *cobra.Command, _ []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
-	status, err := client.BnbBurnStatus()
+	status, err := client.FeeBurnStatus()
 	if err != nil {
 		log.Fatalf("futures fee burn status error: %v", err)
 	}
@@ -51,7 +51,7 @@ func feeBurnStatus(cmd *cobra.Command, _ []string) {
 func feeBurnStatusChange(cmd *cobra.Command, _ []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	status, _ := cmd.Flags().GetBool("status")
-	err := client.BnbBurnStatusChange(status)
+	err := client.FeeBurnStatusChange(status)
 	if err != nil {
 		log.Fatalf("futures fee burn status change error: %v", err)
 	}
