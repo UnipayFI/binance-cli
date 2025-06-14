@@ -15,7 +15,8 @@ import (
 
 var (
 	orderCmd = &cobra.Command{
-		Use: "order",
+		Use:   "order",
+		Short: "futures order list, create, cancel and leverage",
 	}
 
 	orderListCmd = &cobra.Command{

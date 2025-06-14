@@ -11,8 +11,9 @@ import (
 )
 
 var balanceCmd = &cobra.Command{
-	Use: "balance",
-	Run: balance,
+	Use:   "balance",
+	Run:   balance,
+	Short: "show account balance",
 }
 
 func InitBalanceCmds() []*cobra.Command {

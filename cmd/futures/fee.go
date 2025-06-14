@@ -2,56 +2,58 @@ package futures
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/UnipayFI/binance-cli/config"
 	"github.com/UnipayFI/binance-cli/exchange"
 	"github.com/UnipayFI/binance-cli/exchange/futures"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 var (
-	bnbCmd = &cobra.Command{
-		Use: "bnb",
+	feeCmd = &cobra.Command{
+		Use:   "fee",
+		Short: "show fee burn status and change it",
 	}
 
-	bnbStatusCmd = &cobra.Command{
+	feeBurnStatusCmd = &cobra.Command{
 		Use:     "status",
 		Aliases: []string{"s"},
 		Short:   "show fee burn status",
-		Run:     bnbBurnStatus,
+		Run:     feeBurnStatus,
 	}
 
-	bnbStatusChangeCmd = &cobra.Command{
+	feeBurnStatusChangeCmd = &cobra.Command{
 		Use:     "change",
 		Aliases: []string{"c"},
 		Short:   "change fee burn status",
-		Run:     bnbBurnStatusChange,
+		Run:     feeBurnStatusChange,
 	}
 )
 
-func InitBnbCmds() []*cobra.Command {
-	bnbStatusChangeCmd.Flags().BoolP("status", "s", true, "change status")
-	bnbStatusChangeCmd.MarkFlagRequired("status")
+func InitFeeCmds() []*cobra.Command {
+	feeBurnStatusChangeCmd.Flags().BoolP("status", "s", true, "change status")
+	feeBurnStatusChangeCmd.MarkFlagRequired("status")
 
-	bnbCmd.AddCommand(bnbStatusCmd, bnbStatusChangeCmd)
-	return []*cobra.Command{bnbCmd}
+	feeCmd.AddCommand(feeBurnStatusCmd, feeBurnStatusChangeCmd)
+	return []*cobra.Command{feeCmd}
 }
 
-func bnbBurnStatus(cmd *cobra.Command, _ []string) {
+func feeBurnStatus(cmd *cobra.Command, _ []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	status, err := client.BnbBurnStatus()
 	if err != nil {
 		log.Fatalf("futures fee burn status error: %v", err)
 	}
-	fmt.Printf("fee burn switch status: %v", status.FeeBurn)
+	fmt.Printf("fee burn status: %v\n", status.FeeBurn)
 }
 
-func bnbBurnStatusChange(cmd *cobra.Command, _ []string) {
+func feeBurnStatusChange(cmd *cobra.Command, _ []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	status, _ := cmd.Flags().GetBool("status")
 	err := client.BnbBurnStatusChange(status)
 	if err != nil {
 		log.Fatalf("futures fee burn status change error: %v", err)
 	}
-	fmt.Println("fee burn status changed")
+	fmt.Printf("fee burn changed to: %v\n", status)
 }
