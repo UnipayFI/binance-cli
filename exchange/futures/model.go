@@ -27,7 +27,7 @@ func (a *BalanceList) Row() [][]any {
 type OrderList []*futures.Order
 
 func (o *OrderList) Header() []string {
-	return []string{"Order ID", "Symbol", "Side", "Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
+	return []string{"Order ID", "Symbol", "Side", "Position Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
 }
 
 func (o *OrderList) Row() [][]any {

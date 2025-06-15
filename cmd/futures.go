@@ -14,7 +14,7 @@ func init() {
 	futuresCmd.AddCommand(futures.InitBalancesCmds()...)
 	futuresCmd.AddCommand(futures.InitOrderCmds()...)
 	futuresCmd.AddCommand(futures.InitFeeCmds()...)
-	futuresCmd.AddCommand(futures.InitPositionCmds()...)
+	futuresCmd.AddCommand(futures.InitPositionsCmds()...)
 	futuresCmd.AddCommand(futures.InitPositionSideCmds()...)
 	RootCmd.AddCommand(futuresCmd)
 }

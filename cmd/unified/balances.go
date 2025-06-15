@@ -1,4 +1,4 @@
-package futures
+package unified
 
 import (
 	"log"
@@ -10,14 +10,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var balanceCmd = &cobra.Command{
+var balancesCmd = &cobra.Command{
 	Use:   "balances",
 	Run:   balances,
 	Short: "show account balances",
 }
 
-func InitBalanceCmds() []*cobra.Command {
-	return []*cobra.Command{balanceCmd}
+func InitBalancesCmds() []*cobra.Command {
+	return []*cobra.Command{balancesCmd}
 }
 
 func balances(cmd *cobra.Command, args []string) {

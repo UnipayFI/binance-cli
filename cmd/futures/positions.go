@@ -12,7 +12,7 @@ import (
 
 var (
 	positionCmd = &cobra.Command{
-		Use:   "position",
+		Use:   "positions",
 		Short: "futures position",
 	}
 
@@ -24,7 +24,7 @@ var (
 	}
 )
 
-func InitPositionCmds() []*cobra.Command {
+func InitPositionsCmds() []*cobra.Command {
 	positionCmd.AddCommand(positionListCmd)
 	return []*cobra.Command{positionCmd}
 }

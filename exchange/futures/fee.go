@@ -15,13 +15,12 @@ func (c *Client) FeeBurnStatus() (*futures.FeeBurn, error) {
 }
 
 func (c *Client) FeeBurnStatusChange(status bool) error {
-	feeService := futures.NewClient(c.ApiKey, c.ApiSecret).NewFeeBurnService()
-
+	bnbService := futures.NewClient(c.ApiKey, c.ApiSecret).NewFeeBurnService()
 	if status {
-		feeService.Enable()
+		bnbService.Enable()
 	} else {
-		feeService.Disable()
+		bnbService.Disable()
 	}
 
-	return feeService.Do(context.Background())
+	return bnbService.Do(context.Background())
 }

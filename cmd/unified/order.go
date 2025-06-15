@@ -1,4 +1,4 @@
-package futures
+package unified
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/UnipayFI/binance-cli/common"
 	"github.com/UnipayFI/binance-cli/config"
 	"github.com/UnipayFI/binance-cli/exchange"
-	"github.com/UnipayFI/binance-cli/exchange/futures"
+	"github.com/UnipayFI/binance-cli/exchange/unified"
 	"github.com/UnipayFI/binance-cli/printer"
 	"github.com/spf13/cobra"
 )
@@ -16,9 +16,8 @@ import (
 var (
 	orderCmd = &cobra.Command{
 		Use:   "order",
-		Short: "futures order list, create, cancel and leverage",
+		Short: "unified order",
 	}
-
 	orderListCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
@@ -26,23 +25,16 @@ var (
 		Run:     listOrders,
 	}
 	orderCreateCmd = &cobra.Command{
-		Use:     "create",
+		Use:     "um-create",
 		Aliases: []string{"c"},
-		Short:   "create order",
-		Run:     createOrder,
+		Short:   "create UM order",
+		Run:     createUMOrder,
 	}
 	orderCancelCmd = &cobra.Command{
-		Use:     "rm",
-		Aliases: []string{"cancel"},
+		Use:     "cancel",
+		Aliases: []string{"c"},
 		Short:   "cancel order",
-		PreRun: func(cmd *cobra.Command, _ []string) {
-			orderID, _ := cmd.Flags().GetString("orderID")
-			clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
-			if orderID == "" && clientOrderID == "" {
-				log.Fatal("orderID or clientOrderID is required")
-			}
-		},
-		Run: cancelOrder,
+		Run:     cancelOrder,
 	}
 )
 
@@ -65,7 +57,7 @@ func InitOrderCmds() []*cobra.Command {
 }
 
 func listOrders(cmd *cobra.Command, _ []string) {
-	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
 	orders, err := client.GetOrders(symbol)
 	if err != nil {
@@ -74,10 +66,10 @@ func listOrders(cmd *cobra.Command, _ []string) {
 	printer.PrintTable(&orders)
 }
 
-func createOrder(cmd *cobra.Command, _ []string) {
+func createUMOrder(cmd *cobra.Command, _ []string) {
 	_, args, _ := cmd.Root().Find(os.Args[1:])
-	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
-	order, err := client.CreateOrder(common.ParseArgs(args))
+	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	order, err := client.CreateUMOrder(common.ParseArgs(args))
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -86,14 +78,12 @@ func createOrder(cmd *cobra.Command, _ []string) {
 }
 
 func cancelOrder(cmd *cobra.Command, _ []string) {
-	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
 	orderID, _ := cmd.Flags().GetInt64("orderID")
 	clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
 	err := client.CancelOrder(symbol, orderID, clientOrderID)
 	if err != nil {
 		log.Fatal(err)
-	} else {
-		fmt.Println("order canceled")
 	}
 }
