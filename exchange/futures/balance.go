@@ -12,7 +12,7 @@ type Client struct {
 	*exchange.Client
 }
 
-func (c *Client) GetBalance() (balance *BalanceList, err error) {
+func (c *Client) GetBalances() (balance *BalanceList, err error) {
 	balances, err := futures.NewClient(c.ApiKey, c.ApiSecret).NewGetBalanceService().Do(context.Background())
 	if err != nil {
 		return nil, err

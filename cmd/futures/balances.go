@@ -10,21 +10,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var balanceCmd = &cobra.Command{
-	Use:   "balance",
-	Run:   balance,
-	Short: "show account balance",
+var balancesCmd = &cobra.Command{
+	Use:   "balances",
+	Run:   balances,
+	Short: "show account balances",
 }
 
-func InitBalanceCmds() []*cobra.Command {
-	return []*cobra.Command{balanceCmd}
+func InitBalancesCmds() []*cobra.Command {
+	return []*cobra.Command{balancesCmd}
 }
 
-func balance(cmd *cobra.Command, args []string) {
+func balances(cmd *cobra.Command, args []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
-	balance, err := client.GetBalance()
+	balances, err := client.GetBalances()
 	if err != nil {
 		log.Fatal(err)
 	}
-	printer.PrintTable(balance)
+	printer.PrintTable(balances)
 }
