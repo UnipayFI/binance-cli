@@ -10,6 +10,18 @@ import (
 var _ printer.TableWriter = (*AccountBalanceList)(nil)
 var _ printer.TableWriter = (*PositionList)(nil)
 
+type AccountInfo portfolio.Account
+
+func (a *AccountInfo) Header() []string {
+	return []string{"UniMMR", "Account Equity", "Actual Equity", "Account Initial Margin", "Account Maintenance Margin", "Account Status", "Virtual Max Withdraw Amount", "Total Available Balance", "Total Margin Open Loss", "Update Time"}
+}
+
+func (a *AccountInfo) Row() [][]any {
+	return [][]any{
+		{a.UniMMR, a.AccountEquity, a.ActualEquity, a.AccountInitialMargin, a.AccountMaintMargin, a.AccountStatus, a.VirtualMaxWithdrawAmount, a.TotalAvailableBalance, a.TotalMarginOpenLoss, time.UnixMilli(a.UpdateTime).Format("2006-01-02 15:04:05")},
+	}
+}
+
 type AccountBalanceList []portfolio.Balance
 
 func (a *AccountBalanceList) Header() []string {

@@ -13,6 +13,7 @@ var (
 )
 
 func init() {
+	UnifiedCmd.AddCommand(unified.InitAccountCmds()...)
 	UnifiedCmd.AddCommand(unified.InitAutoCollectionCmds()...)
 	UnifiedCmd.AddCommand(unified.InitAutoRepayCmds()...)
 	UnifiedCmd.AddCommand(unified.InitBalancesCmds()...)
