@@ -14,9 +14,11 @@ var (
 
 func init() {
 	UnifiedCmd.AddCommand(unified.InitBalancesCmds()...)
+	UnifiedCmd.AddCommand(unified.InitCommissionRateCmds()...)
 	UnifiedCmd.AddCommand(unified.InitPositionsCmds()...)
 	UnifiedCmd.AddCommand(unified.InitOrderCmds()...)
 	UnifiedCmd.AddCommand(unified.InitLeverageCmds()...)
+	UnifiedCmd.AddCommand(unified.InitMarginCmds()...)
 	UnifiedCmd.AddCommand(unified.InitFeeCmds()...)
 	UnifiedCmd.AddCommand(unified.InitAutoCollectionCmds()...)
 	RootCmd.AddCommand(UnifiedCmd)
