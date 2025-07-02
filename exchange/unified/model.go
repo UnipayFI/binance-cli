@@ -150,3 +150,17 @@ func (i *InterestHistoryList) Row() [][]any {
 	}
 	return rows
 }
+
+type UMIncomeHistoryList []*portfolio.Income
+
+func (i *UMIncomeHistoryList) Header() []string {
+	return []string{"TranID", "TradeID", "Symbol", "Income Type", "Income", "Asset", "Info", "Time"}
+}
+
+func (i *UMIncomeHistoryList) Row() [][]any {
+	rows := [][]any{}
+	for _, income := range *i {
+		rows = append(rows, []any{income.TranID, income.TradeID, income.Symbol, income.IncomeType, income.Income, income.Asset, income.Info, time.UnixMilli(income.Time).Format("2006-01-02 15:04:05")})
+	}
+	return rows
+}

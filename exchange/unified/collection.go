@@ -9,3 +9,7 @@ import (
 func (c *Client) AutoCollection() (*portfolio.SuccessResponse, error) {
 	return portfolio.NewClient(c.ApiKey, c.ApiSecret).NewFundAutoCollectionService().Do(context.Background())
 }
+
+func (c *Client) AssetCollection(asset string) (*portfolio.SuccessResponse, error) {
+	return portfolio.NewClient(c.ApiKey, c.ApiSecret).NewFundCollectionByAssetService().Asset(asset).Do(context.Background())
+}

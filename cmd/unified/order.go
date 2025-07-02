@@ -86,4 +86,5 @@ func cancelOrder(cmd *cobra.Command, _ []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Printf("order canceled: %v\n", orderID)
 }
