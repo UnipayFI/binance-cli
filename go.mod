@@ -27,4 +27,4 @@ require (
 	golang.org/x/sys v0.12.0 // indirect
 )
 
-replace github.com/adshao/go-binance/v2 => github.com/UnipayFI/go-binance/v2 v2.0.0-20250628100416-de33d96e814c
+replace github.com/adshao/go-binance/v2 => github.com/UnipayFI/go-binance/v2 v2.0.0-20250630165259-e0bdb65241d3

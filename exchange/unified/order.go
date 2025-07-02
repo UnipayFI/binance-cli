@@ -20,6 +20,7 @@ func (c *Client) GetOrders(symbol string) (OrderList, error) {
 	}
 	return orderList, nil
 }
+
 func (c *Client) CreateUMOrder(params map[string]string) (*portfolio.UMOrder, error) {
 	sideType := portfolio.SideType(strings.ToUpper(params["side"]))
 	t := portfolio.OrderType(strings.ToUpper(params["type"]))

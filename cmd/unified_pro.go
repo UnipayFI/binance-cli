@@ -13,6 +13,6 @@ var (
 )
 
 func init() {
-	UnifiedProCmd.AddCommand(unified_pro.InitOrderCmds()...)
+	UnifiedProCmd.AddCommand(unified_pro.InitBFUSDCmds()...)
 	RootCmd.AddCommand(UnifiedProCmd)
 }

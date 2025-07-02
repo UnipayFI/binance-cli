@@ -29,7 +29,7 @@ var (
 	}
 )
 
-func InitOrderCmds() []*cobra.Command {
+func InitBFUSDCmds() []*cobra.Command {
 	bfusdCmd.PersistentFlags().StringP("fromAsset", "f", "", "fromAsset")
 	bfusdCmd.PersistentFlags().StringP("targetAsset", "t", "", "targetAsset")
 	bfusdCmd.PersistentFlags().StringP("amount", "a", "", "amount")

@@ -18,5 +18,6 @@ func init() {
 	UnifiedCmd.AddCommand(unified.InitOrderCmds()...)
 	UnifiedCmd.AddCommand(unified.InitLeverageCmds()...)
 	UnifiedCmd.AddCommand(unified.InitFeeCmds()...)
+	UnifiedCmd.AddCommand(unified.InitAutoCollectionCmds()...)
 	RootCmd.AddCommand(UnifiedCmd)
 }
