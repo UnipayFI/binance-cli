@@ -29,3 +29,15 @@ func (c *Client) GetMarginRepay(asset string) (RepayLoanList, error) {
 	}
 	return repayList, nil
 }
+
+func (c *Client) GetMarginInterestHistory(asset string) (InterestHistoryList, error) {
+	interestHistory, err := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewGetMarginInterestHistoryService().Asset(asset).Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	interestHistoryList := make(InterestHistoryList, 0, len(interestHistory.Rows))
+	for _, interest := range interestHistory.Rows {
+		interestHistoryList = append(interestHistoryList, &interest)
+	}
+	return interestHistoryList, nil
+}

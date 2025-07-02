@@ -26,6 +26,12 @@ var (
 		Short: "repay",
 		Run:   marginRepay,
 	}
+
+	interestHistoryCmd = &cobra.Command{
+		Use:   "interest-history",
+		Short: "interest history",
+		Run:   interestHistory,
+	}
 )
 
 func init() {
@@ -34,7 +40,7 @@ func init() {
 }
 
 func InitMarginCmds() []*cobra.Command {
-	marginCmd.AddCommand(marginLoanCmd, marginRepayCmd)
+	marginCmd.AddCommand(marginLoanCmd, marginRepayCmd, interestHistoryCmd)
 	return []*cobra.Command{marginCmd}
 }
 
@@ -52,6 +58,16 @@ func marginRepay(cmd *cobra.Command, _ []string) {
 	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	asset, _ := cmd.Flags().GetString("asset")
 	list, err := client.GetMarginRepay(asset)
+	if err != nil {
+		log.Fatal(err)
+	}
+	printer.PrintTable(&list)
+}
+
+func interestHistory(cmd *cobra.Command, _ []string) {
+	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	asset, _ := cmd.Flags().GetString("asset")
+	list, err := client.GetMarginInterestHistory(asset)
 	if err != nil {
 		log.Fatal(err)
 	}

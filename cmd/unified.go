@@ -13,6 +13,8 @@ var (
 )
 
 func init() {
+	UnifiedCmd.AddCommand(unified.InitAutoCollectionCmds()...)
+	UnifiedCmd.AddCommand(unified.InitAutoRepayCmds()...)
 	UnifiedCmd.AddCommand(unified.InitBalancesCmds()...)
 	UnifiedCmd.AddCommand(unified.InitCommissionRateCmds()...)
 	UnifiedCmd.AddCommand(unified.InitPositionsCmds()...)
@@ -20,6 +22,5 @@ func init() {
 	UnifiedCmd.AddCommand(unified.InitLeverageCmds()...)
 	UnifiedCmd.AddCommand(unified.InitMarginCmds()...)
 	UnifiedCmd.AddCommand(unified.InitFeeCmds()...)
-	UnifiedCmd.AddCommand(unified.InitAutoCollectionCmds()...)
 	RootCmd.AddCommand(UnifiedCmd)
 }
