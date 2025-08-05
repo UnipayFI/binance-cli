@@ -78,3 +78,9 @@ func (c *Client) CancelOrder(symbol string, orderID int64, clientOrderID string)
 	_, err := orderService.Do(context.Background())
 	return err
 }
+
+func (c *Client) CancelAllOrders(symbol string) error {
+	orderService := binance.NewClient(c.ApiKey, c.ApiSecret).NewCancelOpenOrdersService().Symbol(symbol)
+	_, err := orderService.Do(context.Background())
+	return err
+}

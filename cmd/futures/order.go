@@ -32,17 +32,10 @@ var (
 		Run:     createOrder,
 	}
 	orderCancelCmd = &cobra.Command{
-		Use:     "rm",
-		Aliases: []string{"cancel"},
-		Short:   "cancel order",
-		PreRun: func(cmd *cobra.Command, _ []string) {
-			orderID, _ := cmd.Flags().GetString("orderID")
-			clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
-			if orderID == "" && clientOrderID == "" {
-				log.Fatal("orderID or clientOrderID is required")
-			}
-		},
-		Run: cancelOrder,
+		Use:   "cancel",
+		Short: "cancel order",
+		Long:  "cancel order \nIf either orderId or orgClientOrderId is provided, the specified order will be canceled. \nIf only the symbol is passed, all open orders for that trading pair will be canceled.",
+		Run:   cancelOrder,
 	}
 )
 
@@ -57,10 +50,10 @@ func InitOrderCmds() []*cobra.Command {
 		UnknownFlags: true,
 	}
 
-	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
-	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
+	orderCancelCmd.Flags().Int64P("orderId", "i", 0, "orderId")
+	orderCancelCmd.Flags().StringP("origClientOrderId", "c", "", "origClientOrderId")
 
-	orderListCmd.Flags().Int64P("orderID", "i", 0, "orderID")
+	orderListCmd.Flags().Int64P("orderId", "i", 0, "orderId")
 	orderListCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
 	orderListCmd.Flags().Int64P("startTime", "a", 0, "start time")
 	orderListCmd.Flags().Int64P("endTime", "e", 0, "end time")
@@ -97,9 +90,15 @@ func createOrder(cmd *cobra.Command, _ []string) {
 func cancelOrder(cmd *cobra.Command, _ []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
-	orderID, _ := cmd.Flags().GetInt64("orderID")
-	clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
-	err := client.CancelOrder(symbol, orderID, clientOrderID)
+	orderID, _ := cmd.Flags().GetInt64("orderId")
+	clientOrderID, _ := cmd.Flags().GetString("origClientOrderId")
+
+	var err error
+	if orderID == 0 && clientOrderID == "" {
+		err = client.CancelAllOrders(symbol)
+	} else {
+		err = client.CancelOrder(symbol, orderID, clientOrderID)
+	}
 	if err != nil {
 		log.Fatal(err)
 	} else {

@@ -32,10 +32,10 @@ var (
 		Run:     createUMOrder,
 	}
 	orderCancelCmd = &cobra.Command{
-		Use:     "cancel",
-		Aliases: []string{"c"},
-		Short:   "cancel order",
-		Run:     cancelOrder,
+		Use:   "um-cancel",
+		Short: "cancel order",
+		Long:  "cancel order \nIf either orderId or orgClientOrderId is provided, the specified order will be canceled. \nIf only the symbol is passed, all open orders for that trading pair will be canceled.",
+		Run:   cancelOrder,
 	}
 	downloadOrderCmd = &cobra.Command{
 		Use:     "download",
@@ -101,7 +101,13 @@ func cancelOrder(cmd *cobra.Command, _ []string) {
 	symbol, _ := cmd.Flags().GetString("symbol")
 	orderID, _ := cmd.Flags().GetInt64("orderID")
 	clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
-	err := client.CancelOrder(symbol, orderID, clientOrderID)
+
+	var err error
+	if orderID == 0 && clientOrderID == "" {
+		err = client.CancelUMAllOrders(symbol)
+	} else {
+		err = client.CancelOrder(symbol, orderID, clientOrderID)
+	}
 	if err != nil {
 		log.Fatal(err)
 	}

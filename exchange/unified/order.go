@@ -89,6 +89,11 @@ func (c *Client) CancelOrder(symbol string, orderID int64, clientOrderID string)
 	return err
 }
 
+func (c *Client) CancelUMAllOrders(symbol string) error {
+	_, err := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMCancelAllOrdersService().Symbol(symbol).Do(context.Background())
+	return err
+}
+
 func (c *Client) LeverageOrder(symbol string, leverage int) (*futures.SymbolLeverage, error) {
 	orderService := futures.NewClient(c.ApiKey, c.ApiSecret).NewChangeLeverageService().Symbol(symbol)
 	if leverage != 0 {
