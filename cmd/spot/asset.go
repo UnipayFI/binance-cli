@@ -24,6 +24,7 @@ func InitAssetCmds() []*cobra.Command {
 		Long:    "",
 		Run:     listAssets,
 	})
+	assetCmd.Flags().BoolP("omitZeroBalances", "z", false, "omit zero balances")
 	return []*cobra.Command{assetCmd}
 }
 

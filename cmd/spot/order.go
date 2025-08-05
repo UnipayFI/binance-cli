@@ -25,7 +25,7 @@ var (
 		Run:     orderList,
 	}
 	orderOpenListCmd = &cobra.Command{
-		Use:   "open-list",
+		Use:   "open",
 		Short: "list open orders",
 		Run:   orderOpenList,
 	}

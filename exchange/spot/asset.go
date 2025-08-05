@@ -3,7 +3,6 @@ package spot
 import (
 	"context"
 
-	"github.com/UnipayFI/binance-cli/common"
 	"github.com/UnipayFI/binance-cli/exchange"
 	"github.com/adshao/go-binance/v2"
 )
@@ -13,16 +12,13 @@ type Client struct {
 }
 
 func (c *Client) GetAssetList() (AssetBalanceList, error) {
-	account, err := binance.NewClient(c.ApiKey, c.ApiSecret).NewGetAccountService().Do(context.Background())
+	account, err := binance.NewClient(c.ApiKey, c.ApiSecret).NewGetAccountService().OmitZeroBalances(true).Do(context.Background())
 	if err != nil {
 		return nil, err
 	}
 	balances := AssetBalanceList{}
 	for i := range account.Balances {
-		balance := account.Balances[i]
-		if !common.IsZero(balance.Free) || !common.IsZero(balance.Locked) {
-			balances = append(balances, balance)
-		}
+		balances = append(balances, account.Balances[i])
 	}
 	return AssetBalanceList(balances), nil
 }
