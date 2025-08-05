@@ -18,11 +18,10 @@ var (
 		Use: "order",
 	}
 
-	orderListCmd = &cobra.Command{
-		Use:     "list",
-		Aliases: []string{"ls"},
-		Short:   "list orders",
-		Run:     listOrders,
+	orderHistoryCmd = &cobra.Command{
+		Use:   "history",
+		Short: "list order history",
+		Run:   orderHistory,
 	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
@@ -49,6 +48,11 @@ func InitOrderCmds() []*cobra.Command {
 	orderCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
 	orderCmd.MarkFlagRequired("symbol")
 
+	orderHistoryCmd.Flags().Int64P("orderID", "i", 0, "orderID")
+	orderHistoryCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
+	orderHistoryCmd.Flags().Int64P("startTime", "a", 0, "start time")
+	orderHistoryCmd.Flags().Int64P("endTime", "e", 0, "end time")
+
 	var side, orderType string
 	orderCreateCmd.Flags().StringVarP(&side, "side", "S", "", "side")
 	orderCreateCmd.Flags().StringVarP(&orderType, "type", "t", "", "type")
@@ -59,14 +63,18 @@ func InitOrderCmds() []*cobra.Command {
 	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
 	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
 
-	orderCmd.AddCommand(orderListCmd, orderCreateCmd, orderCancelCmd)
+	orderCmd.AddCommand(orderHistoryCmd, orderCreateCmd, orderCancelCmd)
 	return []*cobra.Command{orderCmd}
 }
 
-func listOrders(cmd *cobra.Command, args []string) {
+func orderHistory(cmd *cobra.Command, args []string) {
 	client := spot.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
-	orders, err := client.GetOrders(symbol)
+	limit, _ := cmd.Flags().GetInt("limit")
+	startTime, _ := cmd.Flags().GetInt64("startTime")
+	endTime, _ := cmd.Flags().GetInt64("endTime")
+	orderID, _ := cmd.Flags().GetInt64("orderID")
+	orders, err := client.GetOrderHistory(symbol, orderID, startTime, endTime, limit)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -6,14 +6,27 @@ import (
 	"github.com/adshao/go-binance/v2/portfolio"
 )
 
-func (c *Client) GetUMIncome() (UMIncomeHistoryList, error) {
-	incomeHistory, err := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewGetUMIncomeHistoryService().Do(context.Background())
+func (c *Client) GetUMIncome(symbol, incomeType string, startTime, endTime int64, limit int) (UMIncomeHistoryList, error) {
+	incomeHistory := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewGetUMIncomeHistoryService()
+	if symbol != "" {
+		incomeHistory.Symbol(symbol)
+	}
+	if incomeType != "" {
+		incomeHistory.IncomeType(incomeType)
+	}
+	if startTime != 0 {
+		incomeHistory.StartTime(startTime)
+	}
+	if endTime != 0 {
+		incomeHistory.EndTime(endTime)
+	}
+	if limit != 0 {
+		incomeHistory.Limit(limit)
+	}
+	incomeHistoryList, err := incomeHistory.Do(context.Background())
 	if err != nil {
 		return nil, err
 	}
-	incomeHistoryList := make(UMIncomeHistoryList, 0, len(incomeHistory))
-	for _, income := range incomeHistory {
-		incomeHistoryList = append(incomeHistoryList, income)
-	}
+	incomeHistoryList = UMIncomeHistoryList(incomeHistoryList)
 	return incomeHistoryList, nil
 }

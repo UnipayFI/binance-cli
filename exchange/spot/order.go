@@ -7,8 +7,21 @@ import (
 	"github.com/adshao/go-binance/v2"
 )
 
-func (c *Client) GetOrders(symbol string) (OrderList, error) {
-	orders, err := binance.NewClient(c.ApiKey, c.ApiSecret).NewListOrdersService().Symbol(symbol).Do(context.Background())
+func (c *Client) GetOrderHistory(symbol string, orderID, start, end int64, limit int) (OrderList, error) {
+	service := binance.NewClient(c.ApiKey, c.ApiSecret).NewListOrdersService().Symbol(symbol)
+	if orderID != 0 {
+		service.OrderID(orderID)
+	}
+	if start != 0 {
+		service.StartTime(start)
+	}
+	if end != 0 {
+		service.EndTime(end)
+	}
+	if limit != 0 {
+		service.Limit(limit)
+	}
+	orders, err := service.Do(context.Background())
 	if err != nil {
 		return nil, err
 	}

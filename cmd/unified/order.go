@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/UnipayFI/binance-cli/common"
 	"github.com/UnipayFI/binance-cli/config"
@@ -18,11 +19,10 @@ var (
 		Use:   "order",
 		Short: "unified order",
 	}
-	orderListCmd = &cobra.Command{
-		Use:     "list",
-		Aliases: []string{"ls"},
-		Short:   "list orders",
-		Run:     listOrders,
+	orderHistoryCmd = &cobra.Command{
+		Use:   "history",
+		Short: "order history",
+		Run:   orderHistory,
 	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "um-create",
@@ -35,6 +35,12 @@ var (
 		Aliases: []string{"c"},
 		Short:   "cancel order",
 		Run:     cancelOrder,
+	}
+	downloadOrderCmd = &cobra.Command{
+		Use:     "download",
+		Aliases: []string{"d"},
+		Short:   "download order",
+		Run:     downloadOrder,
 	}
 )
 
@@ -52,14 +58,26 @@ func InitOrderCmds() []*cobra.Command {
 	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
 	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
 
-	orderCmd.AddCommand(orderListCmd, orderCreateCmd, orderCancelCmd)
+	orderHistoryCmd.Flags().Int64P("orderID", "i", 0, "orderID")
+	orderHistoryCmd.Flags().Int64P("startTime", "a", 0, "start time")
+	orderHistoryCmd.Flags().Int64P("endTime", "e", 0, "end time")
+	orderHistoryCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
+
+	downloadOrderCmd.Flags().Int64P("startTime", "a", 0, "start time")
+	downloadOrderCmd.Flags().Int64P("endTime", "e", 0, "end time")
+
+	orderCmd.AddCommand(orderHistoryCmd, orderCreateCmd, orderCancelCmd, downloadOrderCmd)
 	return []*cobra.Command{orderCmd}
 }
 
-func listOrders(cmd *cobra.Command, _ []string) {
+func orderHistory(cmd *cobra.Command, _ []string) {
 	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
-	orders, err := client.GetOrders(symbol)
+	orderID, _ := cmd.Flags().GetInt64("orderID")
+	startTime, _ := cmd.Flags().GetInt64("startTime")
+	endTime, _ := cmd.Flags().GetInt64("endTime")
+	limit, _ := cmd.Flags().GetInt("limit")
+	orders, err := client.GetOrderHistory(symbol, orderID, startTime, endTime, limit)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -87,4 +105,31 @@ func cancelOrder(cmd *cobra.Command, _ []string) {
 		log.Fatal(err)
 	}
 	fmt.Printf("order canceled: %v\n", orderID)
+}
+
+func downloadOrder(cmd *cobra.Command, _ []string) {
+	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	symbol, _ := cmd.Flags().GetString("symbol")
+	startTime, _ := cmd.Flags().GetInt64("startTime")
+	endTime, _ := cmd.Flags().GetInt64("endTime")
+	orderID, err := client.GetDownloadOrderID(symbol, startTime, endTime)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("downloadID:", orderID)
+	for {
+		time.Sleep(3 * time.Second)
+		resp, err := client.GetDownloadOrderLink(orderID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if resp.Status == "completed" {
+			fmt.Println("download link:", resp.URL)
+			break
+		} else if resp.Status == "processing" {
+			fmt.Println("waiting for processing...")
+		} else {
+			log.Fatal("unknown status:", resp.Status)
+		}
+	}
 }

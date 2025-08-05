@@ -19,11 +19,10 @@ var (
 		Short: "futures order list, create, cancel and leverage",
 	}
 
-	orderListCmd = &cobra.Command{
-		Use:     "list",
-		Aliases: []string{"ls"},
-		Short:   "list orders",
-		Run:     listOrders,
+	orderHistoryCmd = &cobra.Command{
+		Use:   "history",
+		Short: "order history",
+		Run:   orderHistory,
 	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
@@ -60,14 +59,23 @@ func InitOrderCmds() []*cobra.Command {
 	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
 	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
 
-	orderCmd.AddCommand(orderListCmd, orderCreateCmd, orderCancelCmd)
+	orderHistoryCmd.Flags().Int64P("orderID", "i", 0, "orderID")
+	orderHistoryCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
+	orderHistoryCmd.Flags().Int64P("startTime", "a", 0, "start time")
+	orderHistoryCmd.Flags().Int64P("endTime", "e", 0, "end time")
+
+	orderCmd.AddCommand(orderHistoryCmd, orderCreateCmd, orderCancelCmd)
 	return []*cobra.Command{orderCmd}
 }
 
-func listOrders(cmd *cobra.Command, _ []string) {
+func orderHistory(cmd *cobra.Command, _ []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
-	orders, err := client.GetOrders(symbol)
+	limit, _ := cmd.Flags().GetInt("limit")
+	startTime, _ := cmd.Flags().GetInt64("startTime")
+	endTime, _ := cmd.Flags().GetInt64("endTime")
+	orderID, _ := cmd.Flags().GetInt64("orderID")
+	orders, err := client.GetOrderHistory(symbol, limit, startTime, endTime, orderID)
 	if err != nil {
 		log.Fatal(err)
 	}
