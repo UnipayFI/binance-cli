@@ -7,7 +7,7 @@ import (
 	"github.com/adshao/go-binance/v2/futures"
 )
 
-func (c *Client) GetOrderHistory(symbol string, limit int, start, end int64, orderID int64) (OrderList, error) {
+func (c *Client) GetOrderList(symbol string, limit int, start, end int64, orderID int64) (OrderList, error) {
 	service := futures.NewClient(c.ApiKey, c.ApiSecret).NewListOrdersService()
 	if symbol != "" {
 		service.Symbol(symbol)

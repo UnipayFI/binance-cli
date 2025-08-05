@@ -18,10 +18,11 @@ var (
 		Use: "order",
 	}
 
-	orderHistoryCmd = &cobra.Command{
-		Use:   "history",
-		Short: "list order history",
-		Run:   orderHistory,
+	orderListCmd = &cobra.Command{
+		Use:     "list",
+		Aliases: []string{"ls"},
+		Short:   "list orders",
+		Run:     orderList,
 	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
@@ -30,14 +31,13 @@ var (
 		Run:     createOrder,
 	}
 	orderCancelCmd = &cobra.Command{
-		Use:     "rm",
-		Aliases: []string{"cancel"},
-		Short:   "cancel order",
+		Use:   "cancel",
+		Short: "cancel order",
 		PreRun: func(cmd *cobra.Command, _ []string) {
-			orderID, _ := cmd.Flags().GetString("orderID")
-			clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
-			if orderID == "" && clientOrderID == "" {
-				log.Fatal("orderID or clientOrderID is required")
+			orderID, _ := cmd.Flags().GetInt64("orderId")
+			clientOrderID, _ := cmd.Flags().GetString("origClientOrderId")
+			if orderID == 0 && clientOrderID == "" {
+				log.Fatal("orderId or origClientOrderId is required")
 			}
 		},
 		Run: cancelOrder,
@@ -48,10 +48,10 @@ func InitOrderCmds() []*cobra.Command {
 	orderCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
 	orderCmd.MarkFlagRequired("symbol")
 
-	orderHistoryCmd.Flags().Int64P("orderID", "i", 0, "orderID")
-	orderHistoryCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
-	orderHistoryCmd.Flags().Int64P("startTime", "a", 0, "start time")
-	orderHistoryCmd.Flags().Int64P("endTime", "e", 0, "end time")
+	orderListCmd.Flags().Int64P("orderId", "i", 0, "orderId")
+	orderListCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
+	orderListCmd.Flags().Int64P("startTime", "a", 0, "start time")
+	orderListCmd.Flags().Int64P("endTime", "e", 0, "end time")
 
 	var side, orderType string
 	orderCreateCmd.Flags().StringVarP(&side, "side", "S", "", "side")
@@ -60,21 +60,21 @@ func InitOrderCmds() []*cobra.Command {
 		UnknownFlags: true,
 	}
 
-	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
-	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
+	orderCancelCmd.Flags().Int64P("orderId", "i", 0, "orderId")
+	orderCancelCmd.Flags().StringP("origClientOrderId", "c", "", "origClientOrderId")
 
-	orderCmd.AddCommand(orderHistoryCmd, orderCreateCmd, orderCancelCmd)
+	orderCmd.AddCommand(orderListCmd, orderCreateCmd, orderCancelCmd)
 	return []*cobra.Command{orderCmd}
 }
 
-func orderHistory(cmd *cobra.Command, args []string) {
+func orderList(cmd *cobra.Command, args []string) {
 	client := spot.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
 	limit, _ := cmd.Flags().GetInt("limit")
 	startTime, _ := cmd.Flags().GetInt64("startTime")
 	endTime, _ := cmd.Flags().GetInt64("endTime")
-	orderID, _ := cmd.Flags().GetInt64("orderID")
-	orders, err := client.GetOrderHistory(symbol, orderID, startTime, endTime, limit)
+	orderID, _ := cmd.Flags().GetInt64("orderId")
+	orders, err := client.GetOrderList(symbol, orderID, startTime, endTime, limit)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -95,8 +95,8 @@ func createOrder(cmd *cobra.Command, _ []string) {
 func cancelOrder(cmd *cobra.Command, _ []string) {
 	client := spot.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
-	orderID, _ := cmd.Flags().GetInt64("orderID")
-	clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
+	orderID, _ := cmd.Flags().GetInt64("orderId")
+	clientOrderID, _ := cmd.Flags().GetString("origClientOrderId")
 	err := client.CancelOrder(symbol, orderID, clientOrderID)
 	if err != nil {
 		log.Fatal(err)

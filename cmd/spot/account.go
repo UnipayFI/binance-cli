@@ -11,27 +11,22 @@ import (
 )
 
 var (
-	assetCmd = &cobra.Command{
-		Use: "asset",
+	accountCmd = &cobra.Command{
+		Use:   "account",
+		Short: "show account info",
+		Run:   showAccount,
 	}
 )
 
-func InitAssetCmds() []*cobra.Command {
-	assetCmd.AddCommand(&cobra.Command{
-		Use:     "list",
-		Aliases: []string{"ls"},
-		Short:   "list assets",
-		Long:    "",
-		Run:     listAssets,
-	})
-	return []*cobra.Command{assetCmd}
+func InitAccountCmds() []*cobra.Command {
+	return []*cobra.Command{accountCmd}
 }
 
-func listAssets(cmd *cobra.Command, args []string) {
+func showAccount(cmd *cobra.Command, args []string) {
 	client := spot.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
-	assets, err := client.GetAssetList()
+	account, err := client.GetAccountInfo()
 	if err != nil {
 		log.Fatal(err)
 	}
-	printer.PrintTable(&assets)
+	printer.PrintTable(&account)
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/adshao/go-binance/v2/portfolio"
 )
 
-func (c *Client) GetOrderHistory(symbol string, orderID, start, end int64, limit int) (OrderList, error) {
+func (c *Client) GetOrderList(symbol string, orderID, start, end int64, limit int) (OrderList, error) {
 	service := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMAllOrdersService().Symbol(symbol)
 	if orderID != 0 {
 		service.OrderID(orderID)

@@ -1,9 +1,30 @@
 package spot
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/UnipayFI/binance-cli/printer"
 	"github.com/adshao/go-binance/v2"
 )
+
+var _ printer.TableWriter = (*Account)(nil)
+
+type Account struct {
+	binance.Account
+}
+
+func (a *Account) Header() []string {
+	return []string{"UID", "Commission Rates", "Can Trade", "Can Withdraw", "Can Deposit", "Account Type", "Permissions", "Update Time"}
+}
+
+func (account *Account) Row() [][]any {
+	a := account.Account
+	rates := fmt.Sprintf("Maker: %s\nTaker: %s\nBuyer: %s\nSeller: %s", a.CommissionRates.Maker, a.CommissionRates.Taker, a.CommissionRates.Buyer, a.CommissionRates.Seller)
+	return [][]any{
+		{a.UID, rates, a.CanTrade, a.CanWithdraw, a.CanDeposit, a.AccountType, a.Permissions, time.UnixMilli(int64(a.UpdateTime)).Format("2006-01-02 15:04:05")},
+	}
+}
 
 var _ printer.TableWriter = (*AssetBalanceList)(nil)
 
