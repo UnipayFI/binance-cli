@@ -25,6 +25,11 @@ var (
 		Short:   "list orders",
 		Run:     orderList,
 	}
+	orderOpenListCmd = &cobra.Command{
+		Use:   "open-list",
+		Short: "list open orders",
+		Run:   orderOpenList,
+	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
 		Aliases: []string{"c"},
@@ -41,7 +46,12 @@ var (
 
 func InitOrderCmds() []*cobra.Command {
 	orderCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
-	orderCmd.MarkFlagRequired("symbol")
+
+	orderListCmd.Flags().Int64P("orderId", "i", 0, "orderId")
+	orderListCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
+	orderListCmd.Flags().Int64P("startTime", "a", 0, "start time")
+	orderListCmd.Flags().Int64P("endTime", "e", 0, "end time")
+	orderListCmd.MarkFlagRequired("symbol")
 
 	var side, orderType string
 	orderCreateCmd.Flags().StringVarP(&side, "side", "S", "", "side")
@@ -49,16 +59,13 @@ func InitOrderCmds() []*cobra.Command {
 	orderCreateCmd.FParseErrWhitelist = cobra.FParseErrWhitelist{
 		UnknownFlags: true,
 	}
+	orderCreateCmd.MarkFlagRequired("symbol")
 
 	orderCancelCmd.Flags().Int64P("orderId", "i", 0, "orderId")
 	orderCancelCmd.Flags().StringP("origClientOrderId", "c", "", "origClientOrderId")
+	orderCancelCmd.MarkFlagRequired("symbol")
 
-	orderListCmd.Flags().Int64P("orderId", "i", 0, "orderId")
-	orderListCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
-	orderListCmd.Flags().Int64P("startTime", "a", 0, "start time")
-	orderListCmd.Flags().Int64P("endTime", "e", 0, "end time")
-
-	orderCmd.AddCommand(orderListCmd, orderCreateCmd, orderCancelCmd)
+	orderCmd.AddCommand(orderListCmd, orderOpenListCmd, orderCreateCmd, orderCancelCmd)
 	return []*cobra.Command{orderCmd}
 }
 
@@ -70,6 +77,16 @@ func orderList(cmd *cobra.Command, _ []string) {
 	endTime, _ := cmd.Flags().GetInt64("endTime")
 	orderID, _ := cmd.Flags().GetInt64("orderID")
 	orders, err := client.GetOrderList(symbol, limit, startTime, endTime, orderID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	printer.PrintTable(&orders)
+}
+
+func orderOpenList(cmd *cobra.Command, _ []string) {
+	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	symbol, _ := cmd.Flags().GetString("symbol")
+	orders, err := client.GetOpenOrders(symbol)
 	if err != nil {
 		log.Fatal(err)
 	}

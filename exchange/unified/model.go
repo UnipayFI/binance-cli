@@ -71,13 +71,37 @@ func (a *PositionList) Row() [][]any {
 	return rows
 }
 
-type OrderList []portfolio.UMAllOrdersResponse
+type UMOrderList []portfolio.UMAllOrdersResponse
 
-func (a *OrderList) Header() []string {
+func (a *UMOrderList) Header() []string {
 	return []string{"Order ID", "Symbol", "Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
 }
 
-func (a *OrderList) Row() [][]any {
+func (a *UMOrderList) Row() [][]any {
+	rows := [][]any{}
+	for _, order := range *a {
+		rows = append(rows, []any{
+			order.OrderID,
+			order.Symbol,
+			order.Side,
+			order.Status,
+			order.Price,
+			order.OrigQty,
+			order.ExecutedQty,
+			time.UnixMilli(order.Time).Format("2006-01-02 15:04:05"),
+			time.UnixMilli(order.UpdateTime).Format("2006-01-02 15:04:05"),
+		})
+	}
+	return rows
+}
+
+type UMOpenOrderList []portfolio.UMOpenOrdersResponse
+
+func (a *UMOpenOrderList) Header() []string {
+	return []string{"Order ID", "Symbol", "Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
+}
+
+func (a *UMOpenOrderList) Row() [][]any {
 	rows := [][]any{}
 	for _, order := range *a {
 		rows = append(rows, []any{

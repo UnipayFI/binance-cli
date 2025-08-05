@@ -28,6 +28,15 @@ func (c *Client) GetOrderList(symbol string, orderID, start, end int64, limit in
 	return OrderList(orders), nil
 }
 
+func (c *Client) GetOpenOrders(symbol string) (OrderList, error) {
+	service := binance.NewClient(c.ApiKey, c.ApiSecret).NewListOpenOrdersService().Symbol(symbol)
+	orders, err := service.Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	return OrderList(orders), nil
+}
+
 func (c *Client) CreateOrder(params map[string]string) (*binance.CreateOrderResponse, error) {
 	sideType := binance.SideType(strings.ToUpper(params["side"]))
 	t := binance.OrderType(strings.ToUpper(params["type"]))

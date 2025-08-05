@@ -9,7 +9,7 @@ import (
 	"github.com/adshao/go-binance/v2/portfolio"
 )
 
-func (c *Client) GetOrderList(symbol string, orderID, start, end int64, limit int) (OrderList, error) {
+func (c *Client) GetUMOrderList(symbol string, orderID, start, end int64, limit int) (UMOrderList, error) {
 	service := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMAllOrdersService().Symbol(symbol)
 	if orderID != 0 {
 		service.OrderID(orderID)
@@ -27,7 +27,20 @@ func (c *Client) GetOrderList(symbol string, orderID, start, end int64, limit in
 	if err != nil {
 		return nil, err
 	}
-	orderList := make(OrderList, len(orders))
+	orderList := make(UMOrderList, len(orders))
+	for i, order := range orders {
+		orderList[i] = *order
+	}
+	return orderList, nil
+}
+
+func (c *Client) GetUMOpenOrders(symbol string) (UMOpenOrderList, error) {
+	service := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMOpenOrdersService().Symbol(symbol)
+	orders, err := service.Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	orderList := make(UMOpenOrderList, len(orders))
 	for i, order := range orders {
 		orderList[i] = *order
 	}
@@ -102,7 +115,7 @@ func (c *Client) LeverageOrder(symbol string, leverage int) (*futures.SymbolLeve
 	return orderService.Do(context.Background())
 }
 
-func (c *Client) GetDownloadOrderID(symbol string, startTime, endTime int64) (string, error) {
+func (c *Client) GetUMDownloadOrderID(symbol string, startTime, endTime int64) (string, error) {
 	orderService := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewGetUMOrderHistoryDownloadIDService()
 	if startTime != 0 {
 		orderService.StartTime(startTime)

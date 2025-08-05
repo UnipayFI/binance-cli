@@ -31,6 +31,14 @@ func (c *Client) GetOrderList(symbol string, limit int, start, end int64, orderI
 	return orders, nil
 }
 
+func (c *Client) GetOpenOrders(symbol string) (OrderList, error) {
+	service := futures.NewClient(c.ApiKey, c.ApiSecret).NewListOpenOrdersService()
+	if symbol != "" {
+		service.Symbol(symbol)
+	}
+	return service.Do(context.Background())
+}
+
 func (c *Client) CreateOrder(params map[string]string) (*futures.CreateOrderResponse, error) {
 	sideType := futures.SideType(strings.ToUpper(params["side"]))
 	t := futures.OrderType(strings.ToUpper(params["type"]))

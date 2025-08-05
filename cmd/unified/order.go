@@ -25,6 +25,11 @@ var (
 		Short:   "list orders",
 		Run:     orderList,
 	}
+	orderOpenListCmd = &cobra.Command{
+		Use:   "um-open-list",
+		Short: "list open orders",
+		Run:   orderOpenList,
+	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "um-create",
 		Aliases: []string{"c"},
@@ -38,16 +43,15 @@ var (
 		Run:   cancelOrder,
 	}
 	downloadOrderCmd = &cobra.Command{
-		Use:     "download",
+		Use:     "um-download",
 		Aliases: []string{"d"},
-		Short:   "download order",
-		Run:     downloadOrder,
+		Short:   "download UM order",
+		Run:     downloadUMOrder,
 	}
 )
 
 func InitOrderCmds() []*cobra.Command {
 	orderCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
-	orderCmd.MarkFlagRequired("symbol")
 
 	var side, orderType string
 	orderCreateCmd.Flags().StringVarP(&side, "side", "S", "", "side")
@@ -55,19 +59,24 @@ func InitOrderCmds() []*cobra.Command {
 	orderCreateCmd.FParseErrWhitelist = cobra.FParseErrWhitelist{
 		UnknownFlags: true,
 	}
+	orderCreateCmd.MarkFlagRequired("symbol")
 
 	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
 	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
+	orderCancelCmd.MarkFlagRequired("symbol")
 
 	orderListCmd.Flags().Int64P("orderID", "i", 0, "orderID")
 	orderListCmd.Flags().Int64P("startTime", "a", 0, "start time")
 	orderListCmd.Flags().Int64P("endTime", "e", 0, "end time")
 	orderListCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
+	orderListCmd.MarkFlagRequired("symbol")
+
+	orderOpenListCmd.MarkFlagRequired("symbol")
 
 	downloadOrderCmd.Flags().Int64P("startTime", "a", 0, "start time")
 	downloadOrderCmd.Flags().Int64P("endTime", "e", 0, "end time")
 
-	orderCmd.AddCommand(orderListCmd, orderCreateCmd, orderCancelCmd, downloadOrderCmd)
+	orderCmd.AddCommand(orderListCmd, orderOpenListCmd, orderCreateCmd, orderCancelCmd, downloadOrderCmd)
 	return []*cobra.Command{orderCmd}
 }
 
@@ -78,7 +87,17 @@ func orderList(cmd *cobra.Command, _ []string) {
 	startTime, _ := cmd.Flags().GetInt64("startTime")
 	endTime, _ := cmd.Flags().GetInt64("endTime")
 	limit, _ := cmd.Flags().GetInt("limit")
-	orders, err := client.GetOrderList(symbol, orderID, startTime, endTime, limit)
+	orders, err := client.GetUMOrderList(symbol, orderID, startTime, endTime, limit)
+	if err != nil {
+		log.Fatal(err)
+	}
+	printer.PrintTable(&orders)
+}
+
+func orderOpenList(cmd *cobra.Command, _ []string) {
+	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	symbol, _ := cmd.Flags().GetString("symbol")
+	orders, err := client.GetUMOpenOrders(symbol)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -114,12 +133,12 @@ func cancelOrder(cmd *cobra.Command, _ []string) {
 	fmt.Printf("order canceled: %v\n", orderID)
 }
 
-func downloadOrder(cmd *cobra.Command, _ []string) {
+func downloadUMOrder(cmd *cobra.Command, _ []string) {
 	client := unified.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
 	startTime, _ := cmd.Flags().GetInt64("startTime")
 	endTime, _ := cmd.Flags().GetInt64("endTime")
-	orderID, err := client.GetDownloadOrderID(symbol, startTime, endTime)
+	orderID, err := client.GetUMDownloadOrderID(symbol, startTime, endTime)
 	if err != nil {
 		log.Fatal(err)
 	}
