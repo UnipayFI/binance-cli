@@ -24,6 +24,20 @@ func (a *BalanceList) Row() [][]any {
 	return rows
 }
 
+type ForceOrderList []*futures.UserLiquidationOrder
+
+func (f *ForceOrderList) Header() []string {
+	return []string{"Order ID", "Symbol", "Side", "Position Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
+}
+
+func (f *ForceOrderList) Row() [][]any {
+	rows := [][]any{}
+	for _, order := range *f {
+		rows = append(rows, []any{order.OrderId, order.Symbol, order.Side, order.PositionSide, order.Status, order.Price, order.OrigQuantity, order.ExecutedQuantity, time.UnixMilli(order.Time).Format("2006-01-02 15:04:05"), time.UnixMilli(order.UpdateTime).Format("2006-01-02 15:04:05")})
+	}
+	return rows
+}
+
 type OrderList []*futures.Order
 
 func (o *OrderList) Header() []string {
@@ -62,6 +76,34 @@ func (i *IncomeHistoryList) Row() [][]any {
 	rows := [][]any{}
 	for _, income := range *i {
 		rows = append(rows, []any{income.Asset, income.Income, income.IncomeType, income.Info, income.Symbol, time.UnixMilli(income.Time).Format("2006-01-02 15:04:05"), income.TranID, income.TradeID})
+	}
+	return rows
+}
+
+type TradeList []*futures.AccountTrade
+
+func (t *TradeList) Header() []string {
+	return []string{"Order ID", "Symbol", "Side", "Position Side", "Price", "Quantity", "Quote Quantity", "Realized Pnl", "Time"}
+}
+
+func (t *TradeList) Row() [][]any {
+	rows := [][]any{}
+	for _, trade := range *t {
+		rows = append(rows, []any{trade.OrderID, trade.Symbol, trade.Side, trade.PositionSide, trade.Price, trade.Quantity, trade.QuoteQuantity, trade.RealizedPnl, time.UnixMilli(trade.Time).Format("2006-01-02 15:04:05")})
+	}
+	return rows
+}
+
+type SymbolConfigList []*futures.SymbolConfig
+
+func (s *SymbolConfigList) Header() []string {
+	return []string{"Symbol", "Margin Type", "Is Auto Add Margin", "Leverage", "Max Notional Value"}
+}
+
+func (s *SymbolConfigList) Row() [][]any {
+	rows := [][]any{}
+	for _, symbolConfig := range *s {
+		rows = append(rows, []any{symbolConfig.Symbol, symbolConfig.MarginType, symbolConfig.IsAutoAddMargin, symbolConfig.Leverage, symbolConfig.MaxNotionalValue})
 	}
 	return rows
 }

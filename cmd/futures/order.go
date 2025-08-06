@@ -10,6 +10,7 @@ import (
 	"github.com/UnipayFI/binance-cli/exchange"
 	"github.com/UnipayFI/binance-cli/exchange/futures"
 	"github.com/UnipayFI/binance-cli/printer"
+	binancefutures "github.com/adshao/go-binance/v2/futures"
 	"github.com/spf13/cobra"
 )
 
@@ -29,6 +30,11 @@ var (
 		Use:   "open",
 		Short: "list open orders",
 		Run:   orderOpenList,
+	}
+	orderForceCloseCmd = &cobra.Command{
+		Use:   "force",
+		Short: "Query user's Force Orders",
+		Run:   forceCloseOrder,
 	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
@@ -53,6 +59,12 @@ func InitOrderCmds() []*cobra.Command {
 	orderListCmd.Flags().Int64P("endTime", "e", 0, "end time")
 	orderListCmd.MarkFlagRequired("symbol")
 
+	orderForceCloseCmd.Flags().StringP("symbol", "s", "", "symbol")
+	orderForceCloseCmd.Flags().StringP("autoCloseType", "t", "", "\"LIQUIDATION\" for liquidation orders, \"ADL\" for ADL orders.")
+	orderForceCloseCmd.Flags().Int64P("startTime", "a", 0, "start time")
+	orderForceCloseCmd.Flags().Int64P("endTime", "e", 0, "end time")
+	orderForceCloseCmd.Flags().Int64P("limit", "l", 50, "limit, max 100")
+
 	var side, orderType string
 	orderCreateCmd.Flags().StringVarP(&side, "side", "S", "", "side")
 	orderCreateCmd.Flags().StringVarP(&orderType, "type", "t", "", "type")
@@ -65,7 +77,7 @@ func InitOrderCmds() []*cobra.Command {
 	orderCancelCmd.Flags().StringP("origClientOrderId", "c", "", "origClientOrderId")
 	orderCancelCmd.MarkFlagRequired("symbol")
 
-	orderCmd.AddCommand(orderListCmd, orderOpenListCmd, orderCreateCmd, orderCancelCmd)
+	orderCmd.AddCommand(orderListCmd, orderOpenListCmd, orderForceCloseCmd, orderCreateCmd, orderCancelCmd)
 	return []*cobra.Command{orderCmd}
 }
 
@@ -87,6 +99,20 @@ func orderOpenList(cmd *cobra.Command, _ []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	symbol, _ := cmd.Flags().GetString("symbol")
 	orders, err := client.GetOpenOrders(symbol)
+	if err != nil {
+		log.Fatal(err)
+	}
+	printer.PrintTable(&orders)
+}
+
+func forceCloseOrder(cmd *cobra.Command, _ []string) {
+	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	symbol, _ := cmd.Flags().GetString("symbol")
+	autoCloseType, _ := cmd.Flags().GetString("autoCloseType")
+	startTime, _ := cmd.Flags().GetInt64("startTime")
+	endTime, _ := cmd.Flags().GetInt64("endTime")
+	limit, _ := cmd.Flags().GetInt("limit")
+	orders, err := client.GetForceOrders(symbol, binancefutures.ForceOrderCloseType(autoCloseType), startTime, endTime, limit)
 	if err != nil {
 		log.Fatal(err)
 	}

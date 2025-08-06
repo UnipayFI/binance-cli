@@ -39,6 +39,30 @@ func (c *Client) GetOpenOrders(symbol string) (OrderList, error) {
 	return service.Do(context.Background())
 }
 
+func (c *Client) GetForceOrders(symbol string, autoCloseType futures.ForceOrderCloseType, startTime, endTime int64, limit int) (ForceOrderList, error) {
+	service := futures.NewClient(c.ApiKey, c.ApiSecret).NewListUserLiquidationOrdersService()
+	if symbol != "" {
+		service.Symbol(symbol)
+	}
+	if autoCloseType != "" {
+		service.AutoCloseType(autoCloseType)
+	}
+	if startTime != 0 {
+		service.StartTime(startTime)
+	}
+	if endTime != 0 {
+		service.EndTime(endTime)
+	}
+	if limit != 0 {
+		service.Limit(limit)
+	}
+	orders, err := service.Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	return orders, nil
+}
+
 func (c *Client) CreateOrder(params map[string]string) (*futures.CreateOrderResponse, error) {
 	sideType := futures.SideType(strings.ToUpper(params["side"]))
 	t := futures.OrderType(strings.ToUpper(params["type"]))
