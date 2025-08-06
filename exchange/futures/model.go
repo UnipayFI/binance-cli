@@ -1,6 +1,8 @@
 package futures
 
 import (
+	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -21,6 +23,20 @@ func (a *BalanceList) Row() [][]any {
 	rows := [][]any{}
 	for _, asset := range *a {
 		rows = append(rows, []any{asset.Asset, asset.Balance, asset.CrossWalletBalance, asset.CrossUnPnl, asset.AvailableBalance, asset.MaxWithdrawAmount})
+	}
+	return rows
+}
+
+type AccountConfigList []*futures.AccountConfig
+
+func (a *AccountConfigList) Header() []string {
+	return []string{"Fee Tier", "Can Trade", "Can Deposit", "Can Withdraw", "Dual Side Position", "Multi Assets Margin", "Trade Group ID"}
+}
+
+func (a *AccountConfigList) Row() [][]any {
+	rows := [][]any{}
+	for _, config := range *a {
+		rows = append(rows, []any{config.FeeTier, config.CanTrade, config.CanDeposit, config.CanWithdraw, config.DualSidePosition, config.MultiAssetsMargin, config.TradeGroupId})
 	}
 	return rows
 }
@@ -120,6 +136,22 @@ func (p *PositionRiskList) Row() [][]any {
 	for _, risk := range *p {
 		asset := strings.TrimRight(risk.Symbol, risk.MarginAsset)
 		rows = append(rows, []any{risk.Symbol, risk.PositionSide, risk.PositionAmt + " " + asset, risk.Notional, risk.EntryPrice, risk.MarkPrice, risk.UnRealizedProfit, risk.LiquidationPrice, time.UnixMilli(risk.UpdateTime).Format("2006-01-02 15:04:05")})
+	}
+	return rows
+}
+
+type CommissionRateList []*futures.CommissionRate
+
+func (c *CommissionRateList) Header() []string {
+	return []string{"Symbol", "Maker Commission Rate", "Taker Commission Rate"}
+}
+
+func (c *CommissionRateList) Row() [][]any {
+	rows := [][]any{}
+	for _, rate := range *c {
+		maker, _ := strconv.ParseFloat(rate.MakerCommissionRate, 64)
+		taker, _ := strconv.ParseFloat(rate.TakerCommissionRate, 64)
+		rows = append(rows, []any{rate.Symbol, fmt.Sprintf("%.4f%%", maker*100), fmt.Sprintf("%.4f%%", taker*100)})
 	}
 	return rows
 }

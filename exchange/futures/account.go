@@ -26,3 +26,11 @@ func (c *Client) GetBalances() (balance *BalanceList, err error) {
 	}
 	return balance, nil
 }
+
+func (c *Client) GetAccountConfig() (*AccountConfigList, error) {
+	config, err := futures.NewClient(c.ApiKey, c.ApiSecret).NewGetAccountConfigService().Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	return &AccountConfigList{config}, nil
+}
