@@ -1,6 +1,7 @@
 package futures
 
 import (
+	"strings"
 	"time"
 
 	"github.com/UnipayFI/binance-cli/printer"
@@ -104,6 +105,21 @@ func (s *SymbolConfigList) Row() [][]any {
 	rows := [][]any{}
 	for _, symbolConfig := range *s {
 		rows = append(rows, []any{symbolConfig.Symbol, symbolConfig.MarginType, symbolConfig.IsAutoAddMargin, symbolConfig.Leverage, symbolConfig.MaxNotionalValue})
+	}
+	return rows
+}
+
+type PositionRiskList []*futures.PositionRiskV3
+
+func (p *PositionRiskList) Header() []string {
+	return []string{"Symbol", "Position Side", "Position Amount", "Notional", "Entry Price", "Mark Price", "Unrealized Profit", "Liquidation Price", "Update Time"}
+}
+
+func (p *PositionRiskList) Row() [][]any {
+	rows := [][]any{}
+	for _, risk := range *p {
+		asset := strings.TrimRight(risk.Symbol, risk.MarginAsset)
+		rows = append(rows, []any{risk.Symbol, risk.PositionSide, risk.PositionAmt + " " + asset, risk.Notional, risk.EntryPrice, risk.MarkPrice, risk.UnRealizedProfit, risk.LiquidationPrice, time.UnixMilli(risk.UpdateTime).Format("2006-01-02 15:04:05")})
 	}
 	return rows
 }

@@ -3,6 +3,7 @@ package common
 import "strings"
 
 func IsZero(s string) bool {
+	s = strings.TrimLeft(s, "-")
 	if s == "0" {
 		return true
 	}
