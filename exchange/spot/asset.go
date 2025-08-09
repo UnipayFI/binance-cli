@@ -11,8 +11,8 @@ type Client struct {
 	*exchange.Client
 }
 
-func (c *Client) GetAssetList() (AssetBalanceList, error) {
-	account, err := binance.NewClient(c.ApiKey, c.ApiSecret).NewGetAccountService().OmitZeroBalances(true).Do(context.Background())
+func (c *Client) GetAssetList(omitZeroBalances bool) (AssetBalanceList, error) {
+	account, err := binance.NewClient(c.ApiKey, c.ApiSecret).NewGetAccountService().OmitZeroBalances(omitZeroBalances).Do(context.Background())
 	if err != nil {
 		return nil, err
 	}

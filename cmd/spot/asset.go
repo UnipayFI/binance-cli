@@ -14,23 +14,26 @@ var (
 	assetCmd = &cobra.Command{
 		Use: "asset",
 	}
-)
 
-func InitAssetCmds() []*cobra.Command {
-	assetCmd.AddCommand(&cobra.Command{
+	assetListCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
 		Short:   "list assets",
 		Long:    "",
 		Run:     listAssets,
-	})
-	assetCmd.Flags().BoolP("omitZeroBalances", "z", false, "omit zero balances")
+	}
+)
+
+func InitAssetCmds() []*cobra.Command {
+	assetCmd.AddCommand(assetListCmd)
+	assetListCmd.Flags().BoolP("omitZeroBalances", "z", true, "omit zero balances")
 	return []*cobra.Command{assetCmd}
 }
 
 func listAssets(cmd *cobra.Command, args []string) {
+	omitZeroBalances, _ := cmd.Flags().GetBool("omitZeroBalances")
 	client := spot.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
-	assets, err := client.GetAssetList()
+	assets, err := client.GetAssetList(omitZeroBalances)
 	if err != nil {
 		log.Fatal(err)
 	}

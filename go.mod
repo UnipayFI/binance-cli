@@ -3,7 +3,7 @@ module github.com/UnipayFI/binance-cli
 go 1.24.0
 
 require (
-	github.com/adshao/go-binance/v2 v2.8.2
+	github.com/adshao/go-binance/v2 v2.8.4
 	github.com/olekukonko/tablewriter v1.0.6
 	github.com/spf13/cobra v1.9.1
 )
@@ -26,5 +26,3 @@ require (
 	github.com/stretchr/testify v1.10.0 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 )
-
-replace github.com/adshao/go-binance/v2 => github.com/UnipayFI/go-binance/v2 v2.0.0-20250630165259-e0bdb65241d3

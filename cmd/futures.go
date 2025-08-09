@@ -23,3 +23,7 @@ func init() {
 	futuresCmd.AddCommand(futures.InitTradesCmds()...)
 	RootCmd.AddCommand(futuresCmd)
 }
+
+type Exchange interface {
+	GetBalances() (balance, pnl float64, err error)
+}

@@ -16,6 +16,11 @@ func (c *Client) GetSymbolConfig(symbol string) (SymbolConfigList, error) {
 	return symbolConfig, nil
 }
 
+func (c *Client) SetLeverage(symbol string, leverage int) error {
+	_, err := futures.NewClient(c.ApiKey, c.ApiSecret).NewChangeLeverageService().Symbol(symbol).Leverage(leverage).Do(context.Background())
+	return err
+}
+
 func (c *Client) SetMarginType(symbol string, marginType futures.MarginType) error {
 	return futures.NewClient(c.ApiKey, c.ApiSecret).NewChangeMarginTypeService().Symbol(symbol).MarginType(marginType).Do(context.Background())
 }

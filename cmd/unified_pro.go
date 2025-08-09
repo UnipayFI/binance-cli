@@ -1,18 +1,18 @@
 package cmd
 
 import (
-	"github.com/UnipayFI/binance-cli/cmd/unified_pro"
+	"github.com/UnipayFI/binance-cli/cmd/portfolio_pro"
 	"github.com/spf13/cobra"
 )
 
 var (
-	UnifiedProCmd = &cobra.Command{
-		Use:   "unified-pro",
-		Short: "unified-pro",
+	portfolioProCmd = &cobra.Command{
+		Use:   "portfolio-pro",
+		Short: "portfolio-pro",
 	}
 )
 
 func init() {
-	UnifiedProCmd.AddCommand(unified_pro.InitBFUSDCmds()...)
-	RootCmd.AddCommand(UnifiedProCmd)
+	portfolioProCmd.AddCommand(portfolio_pro.InitBFUSDCmds()...)
+	RootCmd.AddCommand(portfolioProCmd)
 }
