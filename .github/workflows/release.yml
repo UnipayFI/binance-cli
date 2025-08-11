@@ -1,0 +1,127 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: windows
+            goarch: amd64
+            platform: windows
+            arch: x86_64
+            ext: .exe
+          - goos: linux
+            goarch: amd64
+            platform: linux
+            arch: x86_64
+            ext: ""
+          - goos: linux
+            goarch: arm64
+            platform: linux
+            arch: arm64
+            ext: ""
+          - goos: darwin
+            goarch: amd64
+            platform: macos
+            arch: x86_64
+            ext: ""
+          - goos: darwin
+            goarch: arm64
+            platform: macos
+            arch: arm64
+            ext: ""
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.24'
+
+    - name: Get tag name
+      id: tag
+      run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Build binary
+      env:
+        GOOS: ${{ matrix.goos }}
+        GOARCH: ${{ matrix.goarch }}
+        CGO_ENABLED: 0
+      run: |
+        go build -ldflags "-X github.com/UnipayFI/binance-cli/cmd.version=${{ steps.tag.outputs.tag }} -X github.com/UnipayFI/binance-cli/cmd.buildTime=$(date +%Y-%m-%d_%H:%M:%S)" -o binance-cli${{ matrix.ext }}
+
+    - name: Create package
+      run: |
+        mkdir -p dist
+        tar -czf dist/binance-cli-${{ matrix.platform }}-${{ matrix.arch }}.tar.gz binance-cli${{ matrix.ext }}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: binance-cli-${{ matrix.platform }}-${{ matrix.arch }}
+        path: dist/binance-cli-${{ matrix.platform }}-${{ matrix.arch }}.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Get tag name
+      id: tag
+      run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+
+    - name: Prepare release assets
+      run: |
+        mkdir -p release-assets
+        find ./artifacts -name "*.tar.gz" -exec cp {} release-assets/ \;
+        ls -la release-assets/
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.tag.outputs.tag }}
+        name: Release ${{ steps.tag.outputs.tag }}
+        draft: false
+        prerelease: false
+        files: release-assets/*
+        body: |
+          ## Release ${{ steps.tag.outputs.tag }}
+          
+          ### Downloads
+          
+          | Platform | Architecture | Download |
+          |----------|--------------|----------|
+          | Windows | x86_64 | [binance-cli-windows-x86_64.tar.gz](https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag }}/binance-cli-windows-x86_64.tar.gz) |
+          | Linux | x86_64 | [binance-cli-linux-x86_64.tar.gz](https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag }}/binance-cli-linux-x86_64.tar.gz) |
+          | Linux | arm64 | [binance-cli-linux-arm64.tar.gz](https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag }}/binance-cli-linux-arm64.tar.gz) |
+          | macOS | x86_64 | [binance-cli-macos-x86_64.tar.gz](https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag }}/binance-cli-macos-x86_64.tar.gz) |
+          | macOS | arm64 | [binance-cli-macos-arm64.tar.gz](https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag }}/binance-cli-macos-arm64.tar.gz) |
+          
+          ### Installation
+          
+          1. Download the appropriate package for your platform
+          2. Extract the archive: `tar -xzf binance-cli-{platform}-{arch}.tar.gz`
+          3. Make executable (Linux/macOS): `chmod +x binance-cli`
+          4. Set up environment variables:
+             ```bash
+             export API_KEY="your_api_key"
+             export API_SECRET="your_api_secret"
+             ```
+          5. Run: `./binance-cli --help`
+      env:
+        GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
