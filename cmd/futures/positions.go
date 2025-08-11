@@ -13,8 +13,8 @@ import (
 
 var (
 	positionCmd = &cobra.Command{
-		Use:   "positions",
-		Short: "show positions & show position risk & set position margin",
+		Use:   "position",
+		Short: "show positions & show position risk & set position margin & change position side",
 	}
 
 	positionListCmd = &cobra.Command{
@@ -51,6 +51,26 @@ Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures
 Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Isolated-Position-Margin`,
 		Run: setPositionMargin,
 	}
+
+	positionSideStatusCmd = &cobra.Command{
+		Use:     "side",
+		Aliases: []string{"s"},
+		Short:   "Get user's position mode on EVERY symbol",
+		Long: `Get user's position mode (Hedge Mode or One-way Mode ) on EVERY symbol.
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Current-Position-Mode`,
+		Run: positionSideStatus,
+	}
+
+	positionSideStatusChangeCmd = &cobra.Command{
+		Use:     "set-side",
+		Aliases: []string{"c"},
+		Short:   "Change Position Mode(TRADE)",
+		Long: `Change Position Mode(TRADE).
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Position-Mode`,
+		Run: positionSideStatusChange,
+	}
 )
 
 func InitPositionsCmds() []*cobra.Command {
@@ -66,7 +86,10 @@ func InitPositionsCmds() []*cobra.Command {
 	positionMarginCmd.MarkFlagRequired("amount")
 	positionMarginCmd.MarkFlagRequired("type")
 
-	positionCmd.AddCommand(positionMarginCmd, positionRiskCmd, positionListCmd)
+	positionSideStatusChangeCmd.Flags().BoolP("dualSidePosition", "d", true, "change dual side position")
+	positionSideStatusChangeCmd.MarkFlagRequired("dualSidePosition")
+
+	positionCmd.AddCommand(positionMarginCmd, positionRiskCmd, positionListCmd, positionSideStatusCmd, positionSideStatusChangeCmd)
 	return []*cobra.Command{positionCmd}
 }
 
@@ -106,4 +129,23 @@ func setPositionMargin(cmd *cobra.Command, _ []string) {
 		log.Fatalf("futures position margin set error: %v", err)
 	}
 	fmt.Printf("%s %s position %s %.6f\n", symbol, positionSide, typ, amount)
+}
+
+func positionSideStatus(cmd *cobra.Command, _ []string) {
+	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	position, err := client.GetPositionSide()
+	if err != nil {
+		log.Fatalf("futures position side status error: %v", err)
+	}
+	fmt.Printf("dual side position: %v\n", position)
+}
+
+func positionSideStatusChange(cmd *cobra.Command, _ []string) {
+	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	dualSidePosition, _ := cmd.Flags().GetBool("dualSidePosition")
+	err := client.ChangePositionSide(dualSidePosition)
+	if err != nil {
+		log.Fatalf("futures position side status change error: %v", err)
+	}
+	fmt.Printf("dual side position changed to: %v\n", dualSidePosition)
 }

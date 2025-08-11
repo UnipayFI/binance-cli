@@ -18,7 +18,6 @@ func init() {
 	futuresCmd.AddCommand(futures.InitFeeCmds()...)
 	futuresCmd.AddCommand(futures.InitIncomeCmds()...)
 	futuresCmd.AddCommand(futures.InitPositionsCmds()...)
-	futuresCmd.AddCommand(futures.InitPositionSideCmds()...)
 	futuresCmd.AddCommand(futures.InitSymbolConfigCmds()...)
 	futuresCmd.AddCommand(futures.InitTradesCmds()...)
 	RootCmd.AddCommand(futuresCmd)

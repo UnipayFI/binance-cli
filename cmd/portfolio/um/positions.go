@@ -13,8 +13,8 @@ import (
 
 var (
 	positionsCmd = &cobra.Command{
-		Use:   "positions",
-		Short: "unified UM positions",
+		Use:   "position",
+		Short: "show positions & show position risk & change position side",
 	}
 
 	positionListCmd = &cobra.Command{
@@ -51,7 +51,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/acco
 	}
 
 	positionSideSetCmd = &cobra.Command{
-		Use:     "set",
+		Use:     "set-side",
 		Aliases: []string{"s"},
 		Short:   "set position side",
 		Long: `Change user's position mode (Hedge Mode or One-way Mode ) on EVERY symbol in UM.
@@ -67,7 +67,7 @@ func InitPositionsCmds() []*cobra.Command {
 	positionSideSetCmd.Flags().BoolP("dualSidePosition", "d", true, "change dual side position")
 	positionSideSetCmd.MarkFlagRequired("dualSidePosition")
 
-	positionsCmd.AddCommand(positionListCmd, positionRiskCmd)
+	positionsCmd.AddCommand(positionListCmd, positionRiskCmd, positionSideShowCmd, positionSideSetCmd)
 	return []*cobra.Command{positionsCmd}
 }
 

@@ -13,29 +13,35 @@ import (
 var (
 	feeCmd = &cobra.Command{
 		Use:   "fee",
-		Short: "show fee burn status and change it",
+		Short: "BNB payment fee",
 	}
 
 	feeBurnStatusCmd = &cobra.Command{
 		Use:     "status",
 		Aliases: []string{"s"},
-		Short:   "show fee burn status",
-		Run:     feeBurnStatus,
+		Short:   "Get BNB Burn Status (USER_DATA)",
+		Long: `Get BNB Burn Status (USER_DATA).
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-BNB-Burn-Status`,
+		Run: feeBurnStatus,
 	}
 
-	feeBurnStatusChangeCmd = &cobra.Command{
-		Use:     "change",
+	feeBurnStatusSetCmd = &cobra.Command{
+		Use:     "set",
 		Aliases: []string{"c"},
-		Short:   "change fee burn status",
-		Run:     feeBurnStatusChange,
+		Short:   "Change user's BNB Fee Discount on EVERY symbol",
+		Long: `Change user's BNB Fee Discount (Fee Discount On or Fee Discount Off ) on EVERY symbol.
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Toggle-BNB-Burn-On-Futures-Trade`,
+		Run: feeBurnStatusChange,
 	}
 )
 
 func InitFeeCmds() []*cobra.Command {
-	feeBurnStatusChangeCmd.Flags().BoolP("status", "s", true, "change status")
-	feeBurnStatusChangeCmd.MarkFlagRequired("status")
+	feeBurnStatusSetCmd.Flags().BoolP("feeBurn", "b", true, `"true": Fee Discount On; "false": Fee Discount Off`)
+	feeBurnStatusSetCmd.MarkFlagRequired("feeBurn")
 
-	feeCmd.AddCommand(feeBurnStatusCmd, feeBurnStatusChangeCmd)
+	feeCmd.AddCommand(feeBurnStatusCmd, feeBurnStatusSetCmd)
 	return []*cobra.Command{feeCmd}
 }
 
@@ -50,10 +56,10 @@ func feeBurnStatus(cmd *cobra.Command, _ []string) {
 
 func feeBurnStatusChange(cmd *cobra.Command, _ []string) {
 	client := futures.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
-	status, _ := cmd.Flags().GetBool("status")
-	err := client.FeeBurnStatusChange(status)
+	burn, _ := cmd.Flags().GetBool("feeBurn")
+	err := client.FeeBurnStatusChange(burn)
 	if err != nil {
 		log.Fatalf("futures fee burn status change error: %v", err)
 	}
-	fmt.Printf("fee burn changed to: %v\n", status)
+	fmt.Printf("fee burn changed to: %v\n", burn)
 }

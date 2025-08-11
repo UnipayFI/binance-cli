@@ -16,7 +16,7 @@ import (
 var (
 	orderCmd = &cobra.Command{
 		Use:   "order",
-		Short: "Margin Trading order",
+		Short: "Support create, cancel, list margin orders",
 	}
 	orderListCmd = &cobra.Command{
 		Use:     "list",
@@ -40,7 +40,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 		Aliases: []string{"c"},
 		Short:   "create margin order",
 		Long: `New Margin Order.
-* support all request parameters
+* support all docs parameters
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/New-Margin-Order`,
 		Run: createOrder,
@@ -52,7 +52,8 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 If either orderId or orgClientOrderId is provided, the specified order will be canceled.
 If only the symbol is passed, all open orders for that trading pair will be canceled.
 
-Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Cancel-Margin-Account-Order`,
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Cancel-Margin-Account-Order
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Cancel-Margin-Account-All-Open-Orders-on-a-Symbol`,
 		Run: cancelOrder,
 	}
 )

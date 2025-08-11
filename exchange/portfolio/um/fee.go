@@ -1,4 +1,4 @@
-package portfolio
+package um
 
 import (
 	"context"
@@ -14,7 +14,7 @@ func (c *Client) FeeBurnStatus() (*portfolio.UMFeeBurnStatusResponse, error) {
 	return feeBurn, nil
 }
 
-func (c *Client) FeeBurnStatusChange(status bool) error {
+func (c *Client) SetFeeBurnStatus(status bool) error {
 	_, err := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMFeeBurnService().FeeBurn(status).Do(context.Background())
 	return err
 }

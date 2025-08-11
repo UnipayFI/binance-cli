@@ -15,7 +15,8 @@ import (
 
 var (
 	orderCmd = &cobra.Command{
-		Use: "order",
+		Use:   "order",
+		Short: "Support create, cancel, list orders",
 	}
 
 	orderListCmd = &cobra.Command{
@@ -27,19 +28,31 @@ var (
 	orderOpenListCmd = &cobra.Command{
 		Use:   "open",
 		Short: "list open orders",
-		Run:   orderOpenList,
+		Long: `List open orders.
+
+Docs Link: https://developers.binance.com/docs/binance-spot-api-docs/testnet/rest-api/account-endpoints#current-open-orders-user_data`,
+		Run: orderOpenList,
 	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
 		Aliases: []string{"c"},
 		Short:   "create order",
-		Run:     createOrder,
+		Long: `Create a new order.
+* support all docs parameters
+
+Docs Link: https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#new-order-trade`,
+		Run: createOrder,
 	}
 	orderCancelCmd = &cobra.Command{
 		Use:   "cancel",
 		Short: "cancel order",
-		Long:  "cancel order \nIf either orderId or orgClientOrderId is provided, the specified order will be canceled. \nIf only the symbol is passed, all open orders for that trading pair will be canceled.",
-		Run:   cancelOrder,
+		Long: `cancel order 
+If either orderId or orgClientOrderId is provided, the specified order will be canceled. 
+If only the symbol is passed, all open orders for that trading pair will be canceled.
+
+Docs Link: https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints#cancel-order-trade
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-All-Open-Orders`,
+		Run: cancelOrder,
 	}
 )
 

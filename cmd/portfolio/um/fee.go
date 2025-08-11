@@ -5,15 +5,15 @@ import (
 	"log"
 
 	"github.com/UnipayFI/binance-cli/config"
-	"github.com/UnipayFI/binance-cli/exchange/portfolio"
+	"github.com/UnipayFI/binance-cli/exchange/portfolio/um"
 	"github.com/spf13/cobra"
 )
 
 var (
 	feeCmd = &cobra.Command{
 		Use:   "fee",
-		Short: "UM Futures Fee",
-		Long:  `UM Futures Fee.`,
+		Short: "BNB payment fee",
+		Long:  `BNB payment fee.`,
 	}
 
 	feeBurnStatusCmd = &cobra.Command{
@@ -26,27 +26,27 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 		Run: feeBurnStatus,
 	}
 
-	feeBurnStatusChangeCmd = &cobra.Command{
-		Use:     "change",
+	feeBurnStatusSetCmd = &cobra.Command{
+		Use:     "set",
 		Aliases: []string{"c"},
-		Short:   "Toggle BNB Burn On UM Futures Trade (TRADE)",
-		Long: `Toggle BNB Burn On UM Futures Trade (TRADE).
+		Short:   "Change user's BNB Fee Discount for UM Futures on EVERY symbol",
+		Long: `Change user's BNB Fee Discount for UM Futures (Fee Discount On or Fee Discount Off ) on EVERY symbol.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Toggle-BNB-Burn-On-UM-Futures-Trade`,
-		Run: feeBurnStatusChange,
+		Run: setFeeBurnStatus,
 	}
 )
 
 func InitFeeCmds() []*cobra.Command {
-	feeBurnStatusChangeCmd.Flags().BoolP("status", "s", true, "change status")
-	feeBurnStatusChangeCmd.MarkFlagRequired("status")
+	feeBurnStatusSetCmd.Flags().BoolP("status", "s", true, "change status")
+	feeBurnStatusSetCmd.MarkFlagRequired("status")
 
-	feeCmd.AddCommand(feeBurnStatusCmd, feeBurnStatusChangeCmd)
+	feeCmd.AddCommand(feeBurnStatusCmd, feeBurnStatusSetCmd)
 	return []*cobra.Command{feeCmd}
 }
 
 func feeBurnStatus(cmd *cobra.Command, _ []string) {
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
 	status, err := client.FeeBurnStatus()
 	if err != nil {
 		log.Fatalf("futures fee burn status error: %v", err)
@@ -54,10 +54,10 @@ func feeBurnStatus(cmd *cobra.Command, _ []string) {
 	fmt.Printf("fee burn status: %v\n", status.FeeBurn)
 }
 
-func feeBurnStatusChange(cmd *cobra.Command, _ []string) {
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
+func setFeeBurnStatus(cmd *cobra.Command, _ []string) {
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
 	status, _ := cmd.Flags().GetBool("status")
-	err := client.FeeBurnStatusChange(status)
+	err := client.SetFeeBurnStatus(status)
 	if err != nil {
 		log.Fatalf("futures fee burn status change error: %v", err)
 	}

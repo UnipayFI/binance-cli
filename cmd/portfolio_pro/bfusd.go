@@ -13,19 +13,25 @@ import (
 var (
 	bfusdCmd = &cobra.Command{
 		Use:   "bfusd",
-		Short: "bfusd",
+		Short: "mint redeem BFUSD",
 	}
 
 	mintBfUSD = &cobra.Command{
 		Use:   "mint",
-		Short: "mint",
-		Run:   mint,
+		Short: "mint BFUSD",
+		Long: `Mint BFUSD for all types of Portfolio Margin account.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin-pro/account/Mint-BFUSD-Portfolio-Margin`,
+		Run: mint,
 	}
 
 	redeemBfUSD = &cobra.Command{
 		Use:   "redeem",
-		Short: "redeem",
-		Run:   redeem,
+		Short: "redeem BFUSD",
+		Long: `Redeem BFUSD for all types of Portfolio Margin account.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin-pro/account/Redeem-BFUSD-Portfolio-Margin`,
+		Run: redeem,
 	}
 )
 

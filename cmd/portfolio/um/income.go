@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/UnipayFI/binance-cli/config"
-	"github.com/UnipayFI/binance-cli/exchange/portfolio"
+	"github.com/UnipayFI/binance-cli/exchange/portfolio/um"
 	"github.com/UnipayFI/binance-cli/printer"
 	"github.com/spf13/cobra"
 )
@@ -37,8 +37,8 @@ func umIncome(cmd *cobra.Command, _ []string) {
 	endTime, _ := cmd.Flags().GetInt64("endTime")
 	limit, _ := cmd.Flags().GetInt("limit")
 	page, _ := cmd.Flags().GetInt("page")
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
-	list, err := client.GetUMIncome(symbol, incomeType, startTime, endTime, limit, page)
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
+	list, err := client.GetIncome(symbol, incomeType, startTime, endTime, limit, page)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -12,8 +12,11 @@ import (
 var (
 	repayFuturesNegativeBalanceCmd = &cobra.Command{
 		Use:   "repay-futures-negative-balance",
-		Short: "repay futures negative balance",
-		Run:   repayFuturesNegativeBalance,
+		Short: "Repay futures Negative Balance",
+		Long: `Repay futures Negative Balance.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Repay-futures-Negative-Balance`,
+		Run: repayFuturesNegativeBalance,
 	}
 )
 

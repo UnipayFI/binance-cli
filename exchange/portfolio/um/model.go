@@ -74,3 +74,65 @@ func (a *PositionRiskList) Row() [][]any {
 	}
 	return rows
 }
+
+type IncomeHistoryList []*portfolio.Income
+
+func (i *IncomeHistoryList) Header() []string {
+	return []string{"TranID", "TradeID", "Symbol", "Income Type", "Income", "Asset", "Info", "Time"}
+}
+
+func (i *IncomeHistoryList) Row() [][]any {
+	rows := [][]any{}
+	for _, income := range *i {
+		rows = append(rows, []any{income.TranID, income.TradeID, income.Symbol, income.IncomeType, income.Income, income.Asset, income.Info, time.UnixMilli(income.Time).Format("2006-01-02 15:04:05")})
+	}
+	return rows
+}
+
+type OrderList []portfolio.UMAllOrdersResponse
+
+func (a *OrderList) Header() []string {
+	return []string{"Order ID", "Symbol", "Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
+}
+
+func (a *OrderList) Row() [][]any {
+	rows := [][]any{}
+	for _, order := range *a {
+		rows = append(rows, []any{
+			order.OrderID,
+			order.Symbol,
+			order.Side,
+			order.Status,
+			order.Price,
+			order.OrigQty,
+			order.ExecutedQty,
+			time.UnixMilli(order.Time).Format("2006-01-02 15:04:05"),
+			time.UnixMilli(order.UpdateTime).Format("2006-01-02 15:04:05"),
+		})
+	}
+	return rows
+}
+
+type OpenOrderList []portfolio.UMOpenOrdersResponse
+
+func (a *OpenOrderList) Header() []string {
+	return []string{"Order ID", "Symbol", "Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
+}
+
+func (a *OpenOrderList) Row() [][]any {
+	rows := [][]any{}
+	for _, order := range *a {
+		rows = append(rows, []any{
+			order.OrderID,
+			order.Symbol,
+			order.Side,
+			order.Status,
+			order.Price,
+			order.OrigQty,
+			order.ExecutedQty,
+			time.UnixMilli(order.Time).Format("2006-01-02 15:04:05"),
+			time.UnixMilli(order.UpdateTime).Format("2006-01-02 15:04:05"),
+		})
+	}
+	return rows
+}

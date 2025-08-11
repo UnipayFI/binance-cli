@@ -11,9 +11,15 @@ import (
 )
 
 var (
-	tradesCmd = &cobra.Command{
-		Use:   "trades",
+	tradeCmd = &cobra.Command{
+		Use:   "trade",
 		Short: "Get trades for a specific account and symbol.",
+	}
+
+	tradesListCmd = &cobra.Command{
+		Use:     "list",
+		Aliases: []string{"ls"},
+		Short:   "Get trades for a specific account and symbol.",
 		Long: `If 'startTime' and 'endTime' are both not sent, then the last 7 days' data will be returned.
 The time between 'startTime' and 'endTime' cannot be longer than 7 days.
 The parameter 'fromId' cannot be sent with 'startTime' or 'endTime'.
@@ -25,16 +31,17 @@ Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures
 )
 
 func InitTradesCmds() []*cobra.Command {
-	tradesCmd.Flags().StringP("symbol", "s", "", "symbol")
-	tradesCmd.MarkFlagRequired("symbol")
+	tradesListCmd.Flags().StringP("symbol", "s", "", "symbol")
+	tradesListCmd.MarkFlagRequired("symbol")
 
-	tradesCmd.Flags().StringP("orderId", "i", "", "orderId")
-	tradesCmd.Flags().Int64P("startTime", "a", 0, "start time")
-	tradesCmd.Flags().Int64P("endTime", "e", 0, "end time")
-	tradesCmd.Flags().StringP("fromId", "f", "", "fromId")
-	tradesCmd.Flags().Int64P("limit", "l", 500, "limit, max 1000")
+	tradesListCmd.Flags().StringP("orderId", "i", "", "orderId")
+	tradesListCmd.Flags().Int64P("startTime", "a", 0, "start time")
+	tradesListCmd.Flags().Int64P("endTime", "e", 0, "end time")
+	tradesListCmd.Flags().StringP("fromId", "f", "", "fromId")
+	tradesListCmd.Flags().Int64P("limit", "l", 500, "limit, max 1000")
 
-	return []*cobra.Command{tradesCmd}
+	tradeCmd.AddCommand(tradesListCmd)
+	return []*cobra.Command{tradeCmd}
 }
 
 func trades(cmd *cobra.Command, _ []string) {

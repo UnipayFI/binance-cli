@@ -12,8 +12,11 @@ import (
 var (
 	bnbTransferCmd = &cobra.Command{
 		Use:   "bnb-transfer",
-		Short: "bnb-transfer",
-		Run:   bnbTransfer,
+		Short: "Transfer BNB in and out of UM",
+		Long: `Transfer BNB in and out of UM.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/BNB-transfer`,
+		Run: bnbTransfer,
 	}
 )
 

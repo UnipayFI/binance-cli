@@ -47,54 +47,6 @@ func (a *AccountBalanceList) Row() [][]any {
 	return rows
 }
 
-type UMOrderList []portfolio.UMAllOrdersResponse
-
-func (a *UMOrderList) Header() []string {
-	return []string{"Order ID", "Symbol", "Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
-}
-
-func (a *UMOrderList) Row() [][]any {
-	rows := [][]any{}
-	for _, order := range *a {
-		rows = append(rows, []any{
-			order.OrderID,
-			order.Symbol,
-			order.Side,
-			order.Status,
-			order.Price,
-			order.OrigQty,
-			order.ExecutedQty,
-			time.UnixMilli(order.Time).Format("2006-01-02 15:04:05"),
-			time.UnixMilli(order.UpdateTime).Format("2006-01-02 15:04:05"),
-		})
-	}
-	return rows
-}
-
-type UMOpenOrderList []portfolio.UMOpenOrdersResponse
-
-func (a *UMOpenOrderList) Header() []string {
-	return []string{"Order ID", "Symbol", "Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
-}
-
-func (a *UMOpenOrderList) Row() [][]any {
-	rows := [][]any{}
-	for _, order := range *a {
-		rows = append(rows, []any{
-			order.OrderID,
-			order.Symbol,
-			order.Side,
-			order.Status,
-			order.Price,
-			order.OrigQty,
-			order.ExecutedQty,
-			time.UnixMilli(order.Time).Format("2006-01-02 15:04:05"),
-			time.UnixMilli(order.UpdateTime).Format("2006-01-02 15:04:05"),
-		})
-	}
-	return rows
-}
-
 type MarginLoanList []*portfolio.MarginLoan
 
 func (m *MarginLoanList) Header() []string {
@@ -147,20 +99,6 @@ func (i *InterestHistoryList) Row() [][]any {
 	rows := [][]any{}
 	for _, interest := range *i {
 		rows = append(rows, []any{interest.Asset, interest.Interest, interest.InterestRate, interest.Principal, time.UnixMilli(interest.InterestAccuredTime).Format("2006-01-02 15:04:05")})
-	}
-	return rows
-}
-
-type UMIncomeHistoryList []*portfolio.Income
-
-func (i *UMIncomeHistoryList) Header() []string {
-	return []string{"TranID", "TradeID", "Symbol", "Income Type", "Income", "Asset", "Info", "Time"}
-}
-
-func (i *UMIncomeHistoryList) Row() [][]any {
-	rows := [][]any{}
-	for _, income := range *i {
-		rows = append(rows, []any{income.TranID, income.TradeID, income.Symbol, income.IncomeType, income.Income, income.Asset, income.Info, time.UnixMilli(income.Time).Format("2006-01-02 15:04:05")})
 	}
 	return rows
 }

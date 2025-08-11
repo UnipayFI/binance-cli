@@ -30,8 +30,11 @@ Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures
 	leverageSetCmd = &cobra.Command{
 		Use:     "set-leverage",
 		Aliases: []string{"leverage"},
-		Short:   "set leverage",
-		Run:     setLeverage,
+		Short:   "Change Initial Leverage(TRADE)",
+		Long: `Change Initial Leverage(TRADE).
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Initial-Leverage`,
+		Run: setLeverage,
 	}
 
 	setSymbolConfigCmd = &cobra.Command{

@@ -6,7 +6,7 @@ import (
 	"github.com/adshao/go-binance/v2/futures"
 )
 
-func (c *Client) GetIncome(symbol string, incomeType string, startTime int64, endTime int64, limit int64) (IncomeHistoryList, error) {
+func (c *Client) GetIncome(symbol string, incomeType string, startTime int64, endTime int64, page, limit int64) (IncomeHistoryList, error) {
 	service := futures.NewClient(c.ApiKey, c.ApiSecret).NewGetIncomeHistoryService()
 	if symbol != "" {
 		service.Symbol(symbol)
@@ -19,6 +19,9 @@ func (c *Client) GetIncome(symbol string, incomeType string, startTime int64, en
 	}
 	if endTime != 0 {
 		service.EndTime(endTime)
+	}
+	if page != 0 {
+		service.Page(page)
 	}
 	if limit != 0 {
 		service.Limit(int64(limit))

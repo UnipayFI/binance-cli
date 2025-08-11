@@ -12,8 +12,11 @@ import (
 var (
 	interestHistoryCmd = &cobra.Command{
 		Use:   "interest-history",
-		Short: "interest history",
-		Run:   interestHistory,
+		Short: "Query interest history of negative balance for portfolio margin",
+		Long: `Query interest history of negative balance for portfolio margin.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Query-Portfolio-Margin-Negative-Balance-Interest-History`,
+		Run: interestHistory,
 	}
 )
 

@@ -17,36 +17,59 @@ import (
 var (
 	orderCmd = &cobra.Command{
 		Use:   "order",
-		Short: "futures order list, create, cancel and leverage",
+		Short: "Support create, cancel, list futures orders",
 	}
 
 	orderListCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
-		Short:   "list orders",
-		Run:     orderList,
+		Short:   "Get all account orders; active, canceled, or filled.",
+		Long: `Get all account orders; active, canceled, or filled.
+- These orders will not be found
+		- order status is 'CANCELED' or 'EXPIRED' AND order has NO filled trade AND created time + 3 days < current time
+		- order create time + 90 days < current time
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/All-Orders`,
+		Run: orderList,
 	}
 	orderOpenListCmd = &cobra.Command{
 		Use:   "open",
-		Short: "list open orders",
-		Run:   orderOpenList,
+		Short: "Get all open orders on a symbol",
+		Long: `Get all open orders on a symbol.
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Current-All-Open-Orders`,
+		Run: orderOpenList,
 	}
 	orderForceCloseCmd = &cobra.Command{
 		Use:   "force",
 		Short: "Query user's Force Orders",
-		Run:   forceCloseOrder,
+		Long: `Query user's Force Orders.
+- If "autoCloseType" is not sent, orders with both of the types will be returned
+- If "startTime" is not sent, data within 7 days before "endTime" can be queried
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Users-Force-Orders`,
+		Run: forceCloseOrder,
 	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
 		Aliases: []string{"c"},
-		Short:   "create order",
-		Run:     createOrder,
+		Short:   "Create a new order",
+		Long: `Create a new order.
+* support all docs parameters
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order-Trade`,
+		Run: createOrder,
 	}
 	orderCancelCmd = &cobra.Command{
 		Use:   "cancel",
 		Short: "cancel order",
-		Long:  "cancel order \nIf either orderId or orgClientOrderId is provided, the specified order will be canceled. \nIf only the symbol is passed, all open orders for that trading pair will be canceled.",
-		Run:   cancelOrder,
+		Long: `cancel order 
+If either orderId or orgClientOrderId is provided, the specified order will be canceled. 
+If only the symbol is passed, all open orders for that trading pair will be canceled.
+
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Order
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-All-Open-Orders`,
+		Run: cancelOrder,
 	}
 )
 

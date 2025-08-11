@@ -14,7 +14,10 @@ var (
 	accountCmd = &cobra.Command{
 		Use:   "account",
 		Short: "show account info",
-		Run:   showAccount,
+		Long: `Get current account information.
+
+Docs Link: https://developers.binance.com/docs/binance-spot-api-docs/testnet/rest-api/account-endpoints#account-information-user_data`,
+		Run: showAccount,
 	}
 )
 

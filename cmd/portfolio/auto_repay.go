@@ -17,13 +17,19 @@ var (
 
 	autoRepayStatusCmd = &cobra.Command{
 		Use:   "status",
-		Short: "status",
-		Run:   autoRepayStatus,
+		Short: "Query Auto-repay-futures Status",
+		Long: `Query Auto-repay-futures Status.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Get-Auto-repay-futures-Status`,
+		Run: autoRepayStatus,
 	}
 	setAutoRepayCmd = &cobra.Command{
 		Use:   "set",
-		Short: "set",
-		Run:   setAutoRepay,
+		Short: "Change Auto-repay-futures Status",
+		Long: `Change Auto-repay-futures Status.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Change-Auto-repay-futures-Status`,
+		Run: setAutoRepay,
 	}
 )
 

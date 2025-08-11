@@ -11,8 +11,11 @@ import (
 
 var balancesCmd = &cobra.Command{
 	Use:   "balances",
-	Run:   balances,
-	Short: "show account balances",
+	Short: "Query account balance",
+	Long: `Query account balance.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account`,
+	Run: balances,
 }
 
 func InitBalancesCmds() []*cobra.Command {

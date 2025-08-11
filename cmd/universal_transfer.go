@@ -13,7 +13,7 @@ import (
 var (
 	universalTransferCmd = &cobra.Command{
 		Use:   "universal-transfer",
-		Short: "universal transfer",
+		Short: "user universal transfer",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			transferType, _ := cmd.Flags().GetString("type")
 			asset, _ := cmd.Flags().GetString("asset")
@@ -29,6 +29,10 @@ var (
 				}
 			}
 		},
+		Long: `user universal transfer.
+* You need to enable 'Permits Universal Transfer' option for the API Key which requests this endpoint.
+
+Docs Link: https://developers.binance.com/docs/wallet/asset/user-universal-transfer`,
 		Run: universalTransfer,
 	}
 )

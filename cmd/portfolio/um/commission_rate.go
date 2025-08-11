@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/UnipayFI/binance-cli/config"
-	"github.com/UnipayFI/binance-cli/exchange/portfolio"
+	"github.com/UnipayFI/binance-cli/exchange/portfolio/um"
 	"github.com/spf13/cobra"
 )
 
@@ -29,7 +29,7 @@ func InitCommissionRateCmds() []*cobra.Command {
 func commissionRate(cmd *cobra.Command, _ []string) {
 	symbol, _ := cmd.Flags().GetString("symbol")
 
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
 	commissionRate, err := client.GetCommissionRate(symbol)
 	if err != nil {
 		log.Fatal(err)

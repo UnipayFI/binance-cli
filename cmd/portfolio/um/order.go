@@ -8,7 +8,7 @@ import (
 
 	"github.com/UnipayFI/binance-cli/common"
 	"github.com/UnipayFI/binance-cli/config"
-	"github.com/UnipayFI/binance-cli/exchange/portfolio"
+	"github.com/UnipayFI/binance-cli/exchange/portfolio/um"
 	"github.com/UnipayFI/binance-cli/printer"
 	"github.com/spf13/cobra"
 )
@@ -16,30 +16,49 @@ import (
 var (
 	orderCmd = &cobra.Command{
 		Use:   "order",
-		Short: "USDⓈ-Margined Futures order",
+		Short: "Support create, cancel, list um orders",
 	}
 	orderListCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
 		Short:   "list orders",
-		Run:     orderList,
+		Long: `Get all account UM orders; active, canceled, or filled.
+- These orders will not be found:
+		- order status is 'CANCELED' or 'EXPIRED', AND 
+		- order has NO filled trade, AND 
+		- order create time + 3 days < current time
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Query-All-Margin-Account-Orders`,
+		Run: orderList,
 	}
 	orderOpenListCmd = &cobra.Command{
 		Use:   "open",
 		Short: "list open orders",
-		Run:   orderOpenList,
+		Long: `Query current UM open order.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Query-Current-UM-Open-Order`,
+		Run: orderOpenList,
 	}
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
 		Aliases: []string{"c"},
 		Short:   "create UM order",
-		Run:     createUMOrder,
+		Long: `Create a new order.
+* support all docs parameters
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/New-Margin-Order`,
+		Run: createUMOrder,
 	}
 	orderCancelCmd = &cobra.Command{
 		Use:   "cancel",
 		Short: "cancel order",
-		Long:  "cancel order \nIf either orderId or orgClientOrderId is provided, the specified order will be canceled. \nIf only the symbol is passed, all open orders for that trading pair will be canceled.",
-		Run:   cancelOrder,
+		Long: `cancel order 
+If either orderId or orgClientOrderId is provided, the specified order will be canceled. 
+If only the symbol is passed, all open orders for that trading pair will be canceled.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Cancel-UM-Order
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Cancel-All-UM-Open-Orders`,
+		Run: cancelOrder,
 	}
 	downloadOrderCmd = &cobra.Command{
 		Use:     "download",
@@ -84,13 +103,13 @@ func InitOrderCmds() []*cobra.Command {
 }
 
 func orderList(cmd *cobra.Command, _ []string) {
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
 	symbol, _ := cmd.Flags().GetString("symbol")
 	orderID, _ := cmd.Flags().GetInt64("orderID")
 	startTime, _ := cmd.Flags().GetInt64("startTime")
 	endTime, _ := cmd.Flags().GetInt64("endTime")
 	limit, _ := cmd.Flags().GetInt("limit")
-	orders, err := client.GetUMOrderList(symbol, orderID, startTime, endTime, limit)
+	orders, err := client.GetOrderList(symbol, orderID, startTime, endTime, limit)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,9 +117,9 @@ func orderList(cmd *cobra.Command, _ []string) {
 }
 
 func orderOpenList(cmd *cobra.Command, _ []string) {
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
 	symbol, _ := cmd.Flags().GetString("symbol")
-	orders, err := client.GetUMOpenOrders(symbol)
+	orders, err := client.GetOpenOrders(symbol)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -109,8 +128,8 @@ func orderOpenList(cmd *cobra.Command, _ []string) {
 
 func createUMOrder(cmd *cobra.Command, _ []string) {
 	_, args, _ := cmd.Root().Find(os.Args[1:])
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
-	order, err := client.CreateUMOrder(common.ParseArgs(args))
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
+	order, err := client.CreateOrder(common.ParseArgs(args))
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -119,14 +138,14 @@ func createUMOrder(cmd *cobra.Command, _ []string) {
 }
 
 func cancelOrder(cmd *cobra.Command, _ []string) {
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
 	symbol, _ := cmd.Flags().GetString("symbol")
 	orderID, _ := cmd.Flags().GetInt64("orderID")
 	clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
 
 	var err error
 	if orderID == 0 && clientOrderID == "" {
-		err = client.CancelUMAllOrders(symbol)
+		err = client.CancelAllOrders(symbol)
 	} else {
 		err = client.CancelOrder(symbol, orderID, clientOrderID)
 	}
@@ -137,10 +156,10 @@ func cancelOrder(cmd *cobra.Command, _ []string) {
 }
 
 func downloadUMOrder(cmd *cobra.Command, _ []string) {
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
+	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
 	startTime, _ := cmd.Flags().GetInt64("startTime")
 	endTime, _ := cmd.Flags().GetInt64("endTime")
-	orderID, err := client.GetUMDownloadOrderID(startTime, endTime)
+	orderID, err := client.GetDownloadOrderID(startTime, endTime)
 	if err != nil {
 		log.Fatal(err)
 	}

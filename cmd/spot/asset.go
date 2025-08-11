@@ -19,8 +19,10 @@ var (
 		Use:     "list",
 		Aliases: []string{"ls"},
 		Short:   "list assets",
-		Long:    "",
-		Run:     listAssets,
+		Long: `Get current account assets.
+
+Docs Link: https://developers.binance.com/docs/binance-spot-api-docs/testnet/rest-api/account-endpoints#account-information-user_data`,
+		Run: listAssets,
 	}
 )
 

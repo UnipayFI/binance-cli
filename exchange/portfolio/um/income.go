@@ -1,4 +1,4 @@
-package portfolio
+package um
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/adshao/go-binance/v2/portfolio"
 )
 
-func (c *Client) GetUMIncome(symbol, incomeType string, startTime, endTime int64, limit, page int) (UMIncomeHistoryList, error) {
+func (c *Client) GetIncome(symbol, incomeType string, startTime, endTime int64, limit, page int) (IncomeHistoryList, error) {
 	incomeHistory := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewGetUMIncomeHistoryService()
 	if symbol != "" {
 		incomeHistory.Symbol(symbol)
@@ -30,6 +30,6 @@ func (c *Client) GetUMIncome(symbol, incomeType string, startTime, endTime int64
 	if err != nil {
 		return nil, err
 	}
-	incomeHistoryList = UMIncomeHistoryList(incomeHistoryList)
+	incomeHistoryList = IncomeHistoryList(incomeHistoryList)
 	return incomeHistoryList, nil
 }

@@ -13,7 +13,10 @@ var (
 	accountCmd = &cobra.Command{
 		Use:   "account",
 		Short: "show account info",
-		Run:   account,
+		Long: `Query account information.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Account-Information`,
+		Run: account,
 	}
 )
 

@@ -1,4 +1,4 @@
-package portfolio
+package um
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/adshao/go-binance/v2/portfolio"
 )
 
-func (c *Client) GetUMOrderList(symbol string, orderID, start, end int64, limit int) (UMOrderList, error) {
+func (c *Client) GetOrderList(symbol string, orderID, start, end int64, limit int) (OrderList, error) {
 	service := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMAllOrdersService().Symbol(symbol)
 	if orderID != 0 {
 		service.OrderID(orderID)
@@ -27,27 +27,27 @@ func (c *Client) GetUMOrderList(symbol string, orderID, start, end int64, limit 
 	if err != nil {
 		return nil, err
 	}
-	orderList := make(UMOrderList, len(orders))
+	orderList := make(OrderList, len(orders))
 	for i, order := range orders {
 		orderList[i] = *order
 	}
 	return orderList, nil
 }
 
-func (c *Client) GetUMOpenOrders(symbol string) (UMOpenOrderList, error) {
+func (c *Client) GetOpenOrders(symbol string) (OpenOrderList, error) {
 	service := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMOpenOrdersService().Symbol(symbol)
 	orders, err := service.Do(context.Background())
 	if err != nil {
 		return nil, err
 	}
-	orderList := make(UMOpenOrderList, len(orders))
+	orderList := make(OpenOrderList, len(orders))
 	for i, order := range orders {
 		orderList[i] = *order
 	}
 	return orderList, nil
 }
 
-func (c *Client) CreateUMOrder(params map[string]string) (*portfolio.UMOrder, error) {
+func (c *Client) CreateOrder(params map[string]string) (*portfolio.UMOrder, error) {
 	sideType := portfolio.SideType(strings.ToUpper(params["side"]))
 	t := portfolio.OrderType(strings.ToUpper(params["type"]))
 	orderService := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMOrderService().Symbol(params["symbol"]).Side(sideType).Type(t)
@@ -102,7 +102,7 @@ func (c *Client) CancelOrder(symbol string, orderID int64, clientOrderID string)
 	return err
 }
 
-func (c *Client) CancelUMAllOrders(symbol string) error {
+func (c *Client) CancelAllOrders(symbol string) error {
 	_, err := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewUMCancelAllOrdersService().Symbol(symbol).Do(context.Background())
 	return err
 }
@@ -115,7 +115,7 @@ func (c *Client) LeverageOrder(symbol string, leverage int) (*futures.SymbolLeve
 	return orderService.Do(context.Background())
 }
 
-func (c *Client) GetUMDownloadOrderID(startTime, endTime int64) (string, error) {
+func (c *Client) GetDownloadOrderID(startTime, endTime int64) (string, error) {
 	orderService := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewGetUMOrderHistoryDownloadIDService()
 	if startTime != 0 {
 		orderService.StartTime(startTime)

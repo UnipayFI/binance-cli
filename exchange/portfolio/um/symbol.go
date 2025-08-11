@@ -11,6 +11,10 @@ type Client struct {
 	*exchange.Client
 }
 
+func NewClient(apiKey, apiSecret string) *Client {
+	return &Client{Client: exchange.NewClient(apiKey, apiSecret)}
+}
+
 func (c *Client) GetUMSymbolConfig(symbol string) (SymbolConfigList, error) {
 	symbolConfig, err := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewGetUMSymbolConfigService().Symbol(symbol).Do(context.Background())
 	if err != nil {

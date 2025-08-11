@@ -17,14 +17,23 @@ var (
 
 	autoCollectionCmd = &cobra.Command{
 		Use:   "auto-collection",
-		Short: "auto-collection",
-		Run:   autoCollection,
+		Short: "Fund collection for Portfolio Margin",
+		Long: `Fund collection for Portfolio Margin.
+- The BNB would not be collected from UM-PM account to the Portfolio Margin account.
+- You can only use this function 500 times per hour in a rolling manner.
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Fund-Auto-collection`,
+		Run: autoCollection,
 	}
 
 	assetCollectionCmd = &cobra.Command{
 		Use:   "asset-collection",
-		Short: "asset-collection",
-		Run:   assetCollection,
+		Short: "Transfers specific asset from Futures Account to Margin account",
+		Long: `Transfers specific asset from Futures Account to Margin account.
+- The BNB transfer is not be supported
+
+Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Fund-Collection-by-Asset`,
+		Run: assetCollection,
 	}
 )
 
