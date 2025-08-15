@@ -55,3 +55,17 @@ func (o *OrderList) Row() [][]any {
 	}
 	return rows
 }
+
+type DividendList []binance.DividendResponse
+
+func (d *DividendList) Header() []string {
+	return []string{"ID", "Asset", "Amount", "Dividend Time", "Info", "Transaction ID"}
+}
+
+func (d *DividendList) Row() [][]any {
+	rows := [][]any{}
+	for _, dividend := range *d {
+		rows = append(rows, []any{dividend.ID, dividend.Asset, dividend.Amount, time.UnixMilli(dividend.Time).Format("2006-01-02 15:04:05"), dividend.Info, dividend.TranID})
+	}
+	return rows
+}
