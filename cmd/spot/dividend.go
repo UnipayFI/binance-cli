@@ -18,8 +18,11 @@ var dividendCmd = &cobra.Command{
 var dividendListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"ls"},
-	Short:   "Query asset dividend record.",
-	Run:     listDividends,
+	Short:   "Query asset dividend record",
+	Long: `Query asset dividend record.
+
+Docs Link: https://developers.binance.com/docs/wallet/asset/assets-divided-record`,
+	Run: listDividends,
 }
 
 func InitDividendCmds() []*cobra.Command {

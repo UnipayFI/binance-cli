@@ -2,8 +2,10 @@ package spot
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
+	"github.com/UnipayFI/binance-cli/common"
 	"github.com/UnipayFI/binance-cli/printer"
 	"github.com/adshao/go-binance/v2"
 )
@@ -45,13 +47,19 @@ func (a *AssetBalanceList) Row() [][]any {
 type OrderList []*binance.Order
 
 func (o *OrderList) Header() []string {
-	return []string{"Order ID", "Client Order ID", "Symbol", "Side", "Status", "Price", "Quantity", "Executed Quantity"}
+	return []string{"Order ID", "Client Order ID", "Symbol", "Side", "Type", "Status", "Price", "Quantity", "Executed Quantity"}
 }
 
 func (o *OrderList) Row() [][]any {
 	rows := [][]any{}
 	for _, order := range *o {
-		rows = append(rows, []any{order.OrderID, order.ClientOrderID, order.Symbol, order.Side, order.Status, order.Price, order.OrigQuantity, order.ExecutedQuantity})
+		// Market order price is 0, need calculate
+		if order.Type == binance.OrderTypeMarket && common.IsZero(order.Price) {
+			c, _ := strconv.ParseFloat(order.CummulativeQuoteQuantity, 64)
+			q, _ := strconv.ParseFloat(order.ExecutedQuantity, 64)
+			order.Price = fmt.Sprintf("%.8f", c/q)
+		}
+		rows = append(rows, []any{order.OrderID, order.ClientOrderID, order.Symbol, order.Side, order.Type, order.Status, order.Price, order.OrigQuantity, order.ExecutedQuantity})
 	}
 	return rows
 }

@@ -3,6 +3,7 @@ package portfolio
 import (
 	"context"
 
+	"github.com/UnipayFI/binance-cli/common"
 	"github.com/UnipayFI/binance-cli/exchange"
 	"github.com/adshao/go-binance/v2/portfolio"
 )
@@ -23,7 +24,9 @@ func (c *Client) GetBalances() (AccountBalanceList, error) {
 
 	list := AccountBalanceList{}
 	for _, asset := range balances {
-		list = append(list, *asset)
+		if !common.IsZero(asset.TotalWalletBalance) {
+			list = append(list, *asset)
+		}
 	}
 	return list, nil
 }
