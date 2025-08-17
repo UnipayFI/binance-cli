@@ -9,7 +9,7 @@ import (
 
 var RootCmd = &cobra.Command{
 	Use:   "binance-cli",
-	Short: "binance API for CLI version",
+	Short: "Binance API for CLI version",
 }
 
 func init() {

@@ -12,7 +12,7 @@ import (
 var (
 	collectionCmd = &cobra.Command{
 		Use:   "collection",
-		Short: "collection",
+		Short: "Collection",
 	}
 
 	autoCollectionCmd = &cobra.Command{

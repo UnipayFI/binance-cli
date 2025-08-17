@@ -8,7 +8,7 @@ import (
 var (
 	portfolioCmd = &cobra.Command{
 		Use:   "portfolio",
-		Short: "portfolio",
+		Short: "Portfolio",
 	}
 )
 

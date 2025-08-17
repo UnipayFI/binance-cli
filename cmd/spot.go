@@ -8,7 +8,7 @@ import (
 var (
 	SpotCmd = &cobra.Command{
 		Use:   "spot",
-		Short: "spot",
+		Short: "Spot",
 	}
 )
 

@@ -7,7 +7,7 @@ import (
 
 var futuresCmd = &cobra.Command{
 	Use:   "futures",
-	Short: "futures",
+	Short: "Futures",
 }
 
 func init() {

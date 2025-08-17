@@ -14,7 +14,7 @@ import (
 var (
 	positionCmd = &cobra.Command{
 		Use:   "position",
-		Short: "show positions & show position risk & set position margin & change position side",
+		Short: "Show positions & show position risk & set position margin & change position side",
 	}
 
 	positionListCmd = &cobra.Command{

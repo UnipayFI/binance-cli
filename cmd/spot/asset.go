@@ -12,7 +12,8 @@ import (
 
 var (
 	assetCmd = &cobra.Command{
-		Use: "asset",
+		Use:   "asset",
+		Short: "Show account assets",
 	}
 
 	assetListCmd = &cobra.Command{

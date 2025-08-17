@@ -21,7 +21,7 @@ var (
 	orderListCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
-		Short:   "list orders",
+		Short:   "List orders",
 		Long: `Get all account UM orders; active, canceled, or filled.
 - These orders will not be found:
 		- order status is 'CANCELED' or 'EXPIRED', AND 
@@ -33,7 +33,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 	}
 	orderOpenListCmd = &cobra.Command{
 		Use:   "open",
-		Short: "list open orders",
+		Short: "List open orders",
 		Long: `Query current UM open order.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Query-Current-UM-Open-Order`,
@@ -42,7 +42,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 	orderCreateCmd = &cobra.Command{
 		Use:     "create",
 		Aliases: []string{"c"},
-		Short:   "create UM order",
+		Short:   "Create UM order",
 		Long: `Create a new order.
 * support all docs parameters
 
@@ -51,7 +51,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 	}
 	orderCancelCmd = &cobra.Command{
 		Use:   "cancel",
-		Short: "cancel order",
+		Short: "Cancel order",
 		Long: `cancel order 
 If either orderId or orgClientOrderId is provided, the specified order will be canceled. 
 If only the symbol is passed, all open orders for that trading pair will be canceled.
@@ -63,7 +63,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 	downloadOrderCmd = &cobra.Command{
 		Use:     "download",
 		Aliases: []string{"d"},
-		Short:   "download order history",
+		Short:   "Download order history",
 		Run:     downloadUMOrder,
 	}
 )

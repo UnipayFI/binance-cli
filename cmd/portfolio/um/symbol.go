@@ -14,7 +14,7 @@ import (
 var (
 	symbolConfigCmd = &cobra.Command{
 		Use:   "symbol",
-		Short: "symbol config",
+		Short: "Symbol config",
 	}
 
 	showSymbolConfigCmd = &cobra.Command{
@@ -29,7 +29,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/acco
 	leverageSetCmd = &cobra.Command{
 		Use:     "set-leverage",
 		Aliases: []string{"leverage"},
-		Short:   "set leverage",
+		Short:   "Set leverage",
 		Long: `Change user's initial leverage of specific symbol in UM.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Change-UM-Initial-Leverage`,

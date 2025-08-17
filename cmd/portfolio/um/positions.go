@@ -14,13 +14,13 @@ import (
 var (
 	positionsCmd = &cobra.Command{
 		Use:   "position",
-		Short: "show positions & show position risk & change position side",
+		Short: "Show positions & show position risk & change position side",
 	}
 
 	positionListCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
-		Short:   "list positions",
+		Short:   "List positions",
 		Long: `Get current UM position information.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Get-UM-Account-Detail-V2`,
@@ -30,7 +30,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/acco
 	positionRiskCmd = &cobra.Command{
 		Use:     "risk",
 		Aliases: []string{"r"},
-		Short:   "show position risk",
+		Short:   "Show position risk",
 		Long: `Get current UM position information.
 - Please use with user data stream "ACCOUNT_UPDATE" to meet your timeliness and accuracy needs.
 - for One-way Mode user, the response will only show the "BOTH" positions
@@ -43,7 +43,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/acco
 	positionSideShowCmd = &cobra.Command{
 		Use:     "side",
 		Aliases: []string{"s"},
-		Short:   "show position side",
+		Short:   "Show position side",
 		Long: `Get user's position mode (Hedge Mode or One-way Mode ) on EVERY symbol in UM.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Get-UM-Current-Position-Mode`,
@@ -53,7 +53,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/acco
 	positionSideSetCmd = &cobra.Command{
 		Use:     "set-side",
 		Aliases: []string{"s"},
-		Short:   "set position side",
+		Short:   "Set position side",
 		Long: `Change user's position mode (Hedge Mode or One-way Mode ) on EVERY symbol in UM.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Change-UM-Position-Mode`,

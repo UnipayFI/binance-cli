@@ -13,12 +13,12 @@ import (
 var (
 	accountCmd = &cobra.Command{
 		Use:   "account",
-		Short: "show account balances & account config",
+		Short: "Show account balances & account config",
 	}
 
 	balancesCmd = &cobra.Command{
 		Use:   "balances",
-		Short: "show account balances",
+		Short: "Show account balances",
 		Long: `Get current account's balances.
 
 Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Futures-Account-Balance-V3`,
@@ -27,7 +27,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures
 
 	accountConfigCmd = &cobra.Command{
 		Use:   "config",
-		Short: "show account config",
+		Short: "Show account config",
 		Long: `Query account configuration.
 
 Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Account-Config`,

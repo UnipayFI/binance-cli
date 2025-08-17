@@ -14,13 +14,13 @@ import (
 var (
 	loanCmd = &cobra.Command{
 		Use:   "loan",
-		Short: "loan",
+		Short: "Loan",
 	}
 
 	loanExecCmd = &cobra.Command{
 		Use:     "exec",
 		Aliases: []string{"ex"},
-		Short:   "loan exec",
+		Short:   "Loan exec",
 		Long: `Apply for a margin loan.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Margin-Account-Borrow`,
@@ -30,7 +30,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 	loanListCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
-		Short:   "loan list",
+		Short:   "Loan list",
 		Long: `Query margin loan record.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Query-Margin-Loan-Record`,
@@ -39,7 +39,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/acco
 
 	repayCmd = &cobra.Command{
 		Use:   "repay",
-		Short: "repay loan",
+		Short: "Repay loan",
 		Long: `Repay for a margin loan.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/Margin-Account-Repay`,
@@ -48,7 +48,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 
 	repayDebtCmd = &cobra.Command{
 		Use:   "repay-debt",
-		Short: "repay debt",
+		Short: "Repay debt",
 		Long: `Repay debt for a margin loan.
 - The repay asset amount cannot exceed 50000 USD equivalent value for a single request.
 - If 'amount' is not sent, all the asset loan will be repaid if having enough specific repay assets.
@@ -61,7 +61,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 
 	repayListCmd = &cobra.Command{
 		Use:   "repay-list",
-		Short: "repay history",
+		Short: "Repay history",
 		Long: `Query margin repay record.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Query-Margin-repay-Record`,

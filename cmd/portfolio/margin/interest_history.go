@@ -12,7 +12,7 @@ import (
 var (
 	interestHistoryCmd = &cobra.Command{
 		Use:   "interest-history",
-		Short: "interest history",
+		Short: "Interest history",
 		Long: `Get Margin Borrow/Loan Interest History.
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/account/Get-Margin-BorrowLoan-Interest-History`,

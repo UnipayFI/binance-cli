@@ -14,7 +14,7 @@ var (
 	commissionRateCmd = &cobra.Command{
 		Use:     "commission-rate",
 		Aliases: []string{"cr"},
-		Short:   "show commission rate",
+		Short:   "Show commission rate",
 		Long: `Get User Commission Rate.
 
 Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/User-Commission-Rate`,

@@ -15,7 +15,7 @@ import (
 var (
 	symbolConfigCmd = &cobra.Command{
 		Use:   "symbol",
-		Short: "symbol config(leverage & margin type)",
+		Short: "Symbol config(leverage & margin type)",
 	}
 
 	showSymbolConfigCmd = &cobra.Command{

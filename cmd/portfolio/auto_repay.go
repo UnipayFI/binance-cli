@@ -12,7 +12,7 @@ import (
 var (
 	autoRepayCmd = &cobra.Command{
 		Use:   "auto-repay",
-		Short: "auto-repay",
+		Short: "Auto-repay",
 	}
 
 	autoRepayStatusCmd = &cobra.Command{

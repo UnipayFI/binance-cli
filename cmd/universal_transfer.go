@@ -13,7 +13,7 @@ import (
 var (
 	universalTransferCmd = &cobra.Command{
 		Use:   "universal-transfer",
-		Short: "user universal transfer",
+		Short: "User universal transfer",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			transferType, _ := cmd.Flags().GetString("type")
 			asset, _ := cmd.Flags().GetString("asset")
