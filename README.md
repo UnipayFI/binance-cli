@@ -4,7 +4,9 @@ A command-line tool for Binance API developed based on the Go language, supporti
 ## Installation and Configuration
 
 ### Installation
-// TODO 
+```shell
+curl -sSL https://raw.githubusercontent.com/UnipayFI/binance-cli/refs/heads/main/download.sh | bash
+```
 
 ### Environment variables
 Before using, you need to set the Binance API key:
