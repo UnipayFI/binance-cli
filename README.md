@@ -19,6 +19,13 @@ export API_SECRET="your_api_secret"
 All commands are to be used in the following format:
 ```
 ./binance-cli [Module] [Subcommand] [Arguments]
+
+Available Commands:
+  futures            Futures
+  help               Help about any command
+  portfolio          Portfolio
+  spot               Spot
+  universal-transfer User universal transfer
 ```
 
 ### Spot Module
@@ -30,6 +37,8 @@ Available Commands:
   dividend    Get dividend information
   order       Support create, cancel, list orders
 ```
+**[View detailed documentation](docs/spot.md)**
+
 
 ### Futures Module
 Exec: `./binance-cli futures [Subcommand] [Arguments]`
@@ -45,7 +54,7 @@ Available Commands:
   symbol            Symbol config(leverage & margin type)
   trade             Get trades for a specific account and symbol.
 ```
-### Portfolio
+### Portfolio Module
 #### Portfolio USDⓈ-Margined Futures
 Exec: `./binance-cli portfolio um [Subcommand] [Arguments]`
 ```shell
