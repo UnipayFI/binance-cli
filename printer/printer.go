@@ -12,7 +12,7 @@ type TableWriter interface {
 }
 
 func PrintTable(writer TableWriter) {
-	table := tablewriter.NewWriter(os.Stdout)
+	table := tablewriter.NewTable(os.Stdout, tablewriter.WithEastAsian(false))
 	table.Header(writer.Header())
 	table.Bulk(writer.Row())
 	table.Render()
