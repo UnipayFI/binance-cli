@@ -1,20 +1,20 @@
 package cmd
 
 import (
-	"log"
+	"errors"
 
 	"github.com/UnipayFI/binance-cli/config"
 	"github.com/spf13/cobra"
 )
 
 var RootCmd = &cobra.Command{
-	Use:   "binance-cli",
-	Short: "Binance API for CLI version",
+	Use:     "binance-cli",
+	Short:   "Binance API for CLI version",
+	PreRunE: checkAPIKey,
 }
 
 func init() {
 	initCommandConfig()
-	checkAPIKey()
 }
 
 func Execute() {
@@ -25,8 +25,9 @@ func initCommandConfig() {
 	RootCmd.CompletionOptions.DisableDefaultCmd = true
 }
 
-func checkAPIKey() {
+func checkAPIKey(cmd *cobra.Command, args []string) error {
 	if config.Config.APIKey == "" || config.Config.APISecret == "" {
-		log.Fatal("API_KEY and API_SECRET must be set")
+		return errors.New("API_KEY and API_SECRET must be set")
 	}
+	return nil
 }

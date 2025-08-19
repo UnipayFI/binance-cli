@@ -20,7 +20,7 @@ var (
 	positionListCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
-		Short:   "list positions",
+		Short:   "List positions",
 		Long: `Get current account's all positions.
 
 Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Account-Information-V3`,
@@ -30,7 +30,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures
 	positionRiskCmd = &cobra.Command{
 		Use:     "risk",
 		Aliases: []string{"r"},
-		Short:   "show position risk",
+		Short:   "Show position risk",
 		Long: `Get current position information(only symbol that has position or open orders will be returned).
 
 Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Position-Information-V3`,
@@ -39,7 +39,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures
 
 	positionMarginCmd = &cobra.Command{
 		Use:   "set-margin",
-		Short: "set position margin",
+		Short: "Set position margin",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			typ, _ := cmd.Flags().GetString("type")
 			if typ != "ADD" && typ != "REDUCE" {
@@ -74,8 +74,6 @@ Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures
 )
 
 func InitPositionsCmds() []*cobra.Command {
-	positionCmd.AddCommand(positionListCmd)
-
 	positionRiskCmd.Flags().StringP("symbol", "s", "", "symbol")
 
 	positionMarginCmd.Flags().StringP("symbol", "s", "", "symbol")
