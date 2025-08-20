@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/UnipayFI/binance-cli/config"
-	"github.com/UnipayFI/binance-cli/exchange/portfolio"
+	"github.com/UnipayFI/binance-cli/exchange/portfolio/margin"
 	"github.com/UnipayFI/binance-cli/printer"
 	"github.com/spf13/cobra"
 )
@@ -32,7 +32,7 @@ func InitInterestHistoryCmds() []*cobra.Command {
 }
 
 func interestHistory(cmd *cobra.Command, _ []string) {
-	client := portfolio.NewClient(config.Config.APIKey, config.Config.APISecret)
+	client := margin.NewClient(config.Config.APIKey, config.Config.APISecret)
 	asset, _ := cmd.Flags().GetString("asset")
 	startTime, _ := cmd.Flags().GetInt64("startTime")
 	endTime, _ := cmd.Flags().GetInt64("endTime")

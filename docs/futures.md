@@ -1,6 +1,37 @@
 # Futures Module
 
 ## Quick Navigation
+- [Account](#account)
+  - [Show account config](#account---show-account-config)
+  - [Show account balances](#account---show-account-balances)
+- [Commission-rate](#commission-rate---show-commission-rate)
+- [Fee](#fee)
+  - [Get BNB Burn Status](#fee---get-bnb-burn-status)
+  - [Change user's BNB Fee Discount](#fee---change-users-bnb-fee-discount-on-every-symbol)
+- [Income](#income---query-income-history)
+- [Multi-assets-mode](#multi-assets-mode)
+  - [Show multi-assets mode](#multi-assets-mode---show-multi-assets-mode)
+  - [Set multi-assets mode](#multi-assets-mode---set-multi-assets-mode)
+- [Order](#order)
+  - [Create Market Order](#order---create-market-order)
+  - [Create Limit Order](#order---create-limit-order)
+  - [Reduce short positions(Market)](#order---reduce-short-positionsmarket)
+  - [Reduce long positions(Limit)](#order---reduce-long-positionslimit)
+  - [List open orders](#order---list-open-orders)
+  - [List orders](#order---list-orders)
+  - [Cancel order by ID](#order---cancel-order-by-id)
+  - [Cancel all order by symbol](#order---cancel-all-order-by-symbol)
+- [Position](#position)
+  - [List positions](#position---list-positions)
+  - [Show position risk](#position---show-position-risk)
+  - [Set position margin](#position---set-position-margin)
+  - [Change Position Mode](#position---change-position-mode)
+  - [Get user's position mode](#position---get-users-position-mode-on-every-symbol)
+- [Symbol](#symbol)
+  - [Change Initial Leverage](#symbol---change-initial-leverage)
+  - [Set margin type](#symbol---set-margin-type)
+  - [Show symbol config](#symbol---show-symbol-config)
+- [Trade](#trade----get-trades-for-a-specific-account-and-symbol)
 
 ## Account - Show account config
 Exec: ` ./binance-cli futures account config`
@@ -62,13 +93,13 @@ Exec: `./binance-cli futures multi-assets-mode set --multiAssetsMargin=true`
 > Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order-Trade
 
 ### Order - Create Market Order
-Exec: `./binance-cli futures order create --symbol=ETHUSDT --side=BUY --positionSide=SHORT --type=MARKET --quantity=0.1`
+Exec: `./binance-cli futures order create --symbol=ETHUSDT --side=SELL --positionSide=SHORT --type=MARKET --quantity=0.1`
 
 ### Order - Create Limit Order
 Exec: `./binance-cli futures order create --symbol=ETHUSDT --side=BUY --positionSide=LONG --type=LIMIT --timeInForce=GTC --quantity=0.01 --price=4000`
 
 ### Order - Reduce short positions(Market)
-Exec: `./binance-cli futures order create --symbol=ETHUSDT --side=SELL --positionSide=SHORT --type=MARKET --quantity=1.0`
+Exec: `./binance-cli futures order create --symbol=ETHUSDT --side=BUY --positionSide=SHORT --type=MARKET --quantity=1.0`
 
 ### Order - Reduce long positions(Limit)
 Exec: `./binance-cli futures order create --symbol=ETHUSDT --side=SELL --positionSide=LONG --type=LIMIT --timeInForce=GTC --price=4000.0 --quantity=0.01`

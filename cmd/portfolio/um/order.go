@@ -47,7 +47,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 * support all docs parameters
 
 Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trade/New-Margin-Order`,
-		Run: createUMOrder,
+		Run: createOrder,
 	}
 	orderCancelCmd = &cobra.Command{
 		Use:   "cancel",
@@ -126,7 +126,7 @@ func orderOpenList(cmd *cobra.Command, _ []string) {
 	printer.PrintTable(&orders)
 }
 
-func createUMOrder(cmd *cobra.Command, _ []string) {
+func createOrder(cmd *cobra.Command, _ []string) {
 	_, args, _ := cmd.Root().Find(os.Args[1:])
 	client := um.NewClient(config.Config.APIKey, config.Config.APISecret)
 	order, err := client.CreateOrder(common.ParseArgs(args))

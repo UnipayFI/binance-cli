@@ -57,7 +57,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures
 		Long: `Create a new order.
 * support all docs parameters
 
-Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order-Trade`,
+Docs Link: https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api`,
 		Run: createOrder,
 	}
 	orderCancelCmd = &cobra.Command{

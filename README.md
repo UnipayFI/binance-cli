@@ -54,6 +54,8 @@ Available Commands:
   symbol            Symbol config(leverage & margin type)
   trade             Get trades for a specific account and symbol.
 ```
+**[View detailed documentation](docs/futures.md)**
+
 ### Portfolio Module
 #### Portfolio USDⓈ-Margined Futures
 Exec: `./binance-cli portfolio um [Subcommand] [Arguments]`
@@ -66,6 +68,7 @@ Available Commands:
   position        Show positions & show position risk & change position side
   symbol          Symbol config
 ```
+**[View detailed documentation](docs/portfolio_um.md)**
 
 #### Portfolio Margin Trading
 Exec: `./binance-cli portfolio margin [Subcommand] [Arguments]`
@@ -75,6 +78,7 @@ Available Commands:
   loan             Loan
   order            Support create, cancel, list margin orders
 ```
+**[View detailed documentation](docs/portfolio_margin.md)**
 
 ## License
 UnipayFI/binance-cli is released under the [MIT License](https://opensource.org/licenses/MIT).

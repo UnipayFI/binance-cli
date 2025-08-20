@@ -89,3 +89,8 @@ func (c *Client) CancelOrder(symbol string, orderID int64, clientOrderID string)
 	}
 	return nil
 }
+
+func (c *Client) CancelAllOrders(symbol string) error {
+	_, err := portfolio.NewClient(c.ApiKey, c.ApiSecret).NewMarginCancelAllOrdersService().Symbol(symbol).Do(context.Background())
+	return err
+}

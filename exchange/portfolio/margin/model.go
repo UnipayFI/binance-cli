@@ -71,3 +71,17 @@ func (a *MarginOrderList) Row() [][]any {
 	}
 	return rows
 }
+
+type MarginInterestHistoryList []portfolio.MarginInterest
+
+func (i *MarginInterestHistoryList) Header() []string {
+	return []string{"TxID", "Asset", "Raw Asset", "Type", "Principal", "Interest", "Interest Rate", "Interest Accured Time"}
+}
+
+func (i *MarginInterestHistoryList) Row() [][]any {
+	rows := [][]any{}
+	for _, interest := range *i {
+		rows = append(rows, []any{interest.TxID, interest.Asset, interest.RawAsset, interest.Type, interest.Principal, interest.Interest, interest.InterestRate, time.UnixMilli(interest.InterestAccuredTime).Format("2006-01-02 15:04:05")})
+	}
+	return rows
+}

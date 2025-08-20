@@ -60,7 +60,7 @@ Docs Link: https://developers.binance.com/docs/derivatives/portfolio-margin/trad
 
 func InitOrderCmds() []*cobra.Command {
 	orderListCmd.Flags().StringP("symbol", "s", "", "symbol")
-	orderListCmd.Flags().Int64P("orderID", "i", 0, "orderID")
+	orderListCmd.Flags().Int64P("orderId", "i", 0, "orderId")
 	orderListCmd.Flags().Int64P("startTime", "a", 0, "start time")
 	orderListCmd.Flags().Int64P("endTime", "e", 0, "end time")
 	orderListCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
@@ -78,8 +78,8 @@ func InitOrderCmds() []*cobra.Command {
 	}
 
 	orderCancelCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
-	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
-	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
+	orderCancelCmd.Flags().Int64P("orderId", "i", 0, "orderId")
+	orderCancelCmd.Flags().StringP("clientOrderId", "c", "", "clientOrderId")
 	orderCancelCmd.MarkFlagRequired("symbol")
 
 	orderCmd.AddCommand(orderListCmd, orderOpenListCmd, orderCreateCmd, orderCancelCmd)
@@ -88,7 +88,7 @@ func InitOrderCmds() []*cobra.Command {
 
 func orderList(cmd *cobra.Command, _ []string) {
 	symbol, _ := cmd.Flags().GetString("symbol")
-	orderID, _ := cmd.Flags().GetInt64("orderID")
+	orderID, _ := cmd.Flags().GetInt64("orderId")
 	startTime, _ := cmd.Flags().GetInt64("startTime")
 	endTime, _ := cmd.Flags().GetInt64("endTime")
 	limit, _ := cmd.Flags().GetInt("limit")
@@ -125,11 +125,17 @@ func createOrder(cmd *cobra.Command, _ []string) {
 
 func cancelOrder(cmd *cobra.Command, _ []string) {
 	symbol, _ := cmd.Flags().GetString("symbol")
-	orderID, _ := cmd.Flags().GetInt64("orderID")
-	clientOrderID, _ := cmd.Flags().GetString("clientOrderID")
+	orderId, _ := cmd.Flags().GetInt64("orderId")
+	clientOrderID, _ := cmd.Flags().GetString("clientOrderId")
 
 	client := margin.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
-	err := client.CancelOrder(symbol, orderID, clientOrderID)
+	var err error
+	if orderId == 0 && clientOrderID == "" {
+		err = client.CancelAllOrders(symbol)
+	} else {
+		err = client.CancelOrder(symbol, orderId, clientOrderID)
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
