@@ -58,13 +58,13 @@ func (f *ForceOrderList) Row() [][]any {
 type OrderList []*futures.Order
 
 func (o *OrderList) Header() []string {
-	return []string{"Order ID", "Symbol", "Side", "Position Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
+	return []string{"Order ID", "Symbol", "Side", "Type", "Position Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
 }
 
 func (o *OrderList) Row() [][]any {
 	rows := [][]any{}
 	for _, order := range *o {
-		rows = append(rows, []any{order.OrderID, order.Symbol, order.Side, order.PositionSide, order.Status, order.Price, order.OrigQuantity, order.ExecutedQuantity, time.UnixMilli(order.Time).Format("2006-01-02 15:04:05"), time.UnixMilli(order.UpdateTime).Format("2006-01-02 15:04:05")})
+		rows = append(rows, []any{order.OrderID, order.Symbol, order.Side, order.Type, order.PositionSide, order.Status, order.Price, order.OrigQuantity, order.ExecutedQuantity, time.UnixMilli(order.Time).Format("2006-01-02 15:04:05"), time.UnixMilli(order.UpdateTime).Format("2006-01-02 15:04:05")})
 	}
 	return rows
 }
