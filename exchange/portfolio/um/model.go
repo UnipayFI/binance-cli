@@ -52,7 +52,7 @@ func (a *PositionList) Row() [][]any {
 type PositionRiskList []*portfolio.UMPosition
 
 func (a *PositionRiskList) Header() []string {
-	return []string{"Symbol", "Position Amont", "Entry Price", "Unrealized Profit", "Liquidation Price", "Leverage", "Max Notional", "Position Side", "Notional", "Update Time"}
+	return []string{"Symbol", "Position Side", "Position Amont", "Entry Price", "Unrealized Profit", "Liquidation Price", "Leverage", "Notional", "Max Notional", "Update Time"}
 }
 
 func (a *PositionRiskList) Row() [][]any {
@@ -60,15 +60,14 @@ func (a *PositionRiskList) Row() [][]any {
 	for _, position := range *a {
 		rows = append(rows, []any{
 			position.Symbol,
+			position.PositionSide,
 			position.PositionAmt,
 			position.EntryPrice,
 			position.UnrealizedProfit,
 			position.LiquidationPrice,
 			position.Leverage,
-			position.MaxNotional,
-			position.MaxNotionalValue,
-			position.PositionSide,
 			position.Notional,
+			position.MaxNotionalValue,
 			time.UnixMilli(position.UpdateTime).Format("2006-01-02 15:04:05"),
 		})
 	}
@@ -92,7 +91,7 @@ func (i *IncomeHistoryList) Row() [][]any {
 type OrderList []portfolio.UMAllOrdersResponse
 
 func (a *OrderList) Header() []string {
-	return []string{"Order ID", "Symbol", "Side", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
+	return []string{"Order ID", "Symbol", "Side", "Type", "Status", "Price", "Quantity", "Executed Quantity", "Time", "Update Time"}
 }
 
 func (a *OrderList) Row() [][]any {
@@ -102,6 +101,7 @@ func (a *OrderList) Row() [][]any {
 			order.OrderID,
 			order.Symbol,
 			order.Side,
+			order.Type,
 			order.Status,
 			order.Price,
 			order.OrigQty,
