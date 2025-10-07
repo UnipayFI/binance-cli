@@ -79,22 +79,22 @@ func InitOrderCmds() []*cobra.Command {
 	}
 	orderCreateCmd.MarkFlagRequired("symbol")
 
-	orderCancelCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
+	orderCancelCmd.Flags().StringP("symbol", "s", "", "symbol")
 	orderCancelCmd.Flags().StringP("orderID", "i", "", "orderID")
 	orderCancelCmd.Flags().StringP("clientOrderID", "c", "", "clientOrderID")
 	orderCancelCmd.MarkFlagRequired("symbol")
 
-	orderListCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
+	orderListCmd.Flags().StringP("symbol", "s", "", "symbol")
 	orderListCmd.Flags().Int64P("orderID", "i", 0, "orderID")
 	orderListCmd.Flags().Int64P("startTime", "a", 0, "start time")
 	orderListCmd.Flags().Int64P("endTime", "e", 0, "end time")
 	orderListCmd.Flags().IntP("limit", "l", 500, "limit, max 1000")
 	orderListCmd.MarkFlagRequired("symbol")
 
-	orderOpenListCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
+	orderOpenListCmd.Flags().StringP("symbol", "s", "", "symbol")
 	orderOpenListCmd.MarkFlagRequired("symbol")
 
-	downloadOrderCmd.PersistentFlags().StringP("symbol", "s", "", "symbol")
+	downloadOrderCmd.Flags().StringP("symbol", "s", "", "symbol")
 	downloadOrderCmd.Flags().Int64P("startTime", "a", 0, "start time")
 	downloadOrderCmd.Flags().Int64P("endTime", "e", 0, "end time")
 
