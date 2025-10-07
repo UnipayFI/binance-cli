@@ -25,7 +25,7 @@ Available Commands:
   help               Help about any command
   portfolio          Portfolio
   spot               Spot
-  universal-transfer User universal transfer
+  universal-transfer Transfer asset and history
 ```
 
 ### Spot Module

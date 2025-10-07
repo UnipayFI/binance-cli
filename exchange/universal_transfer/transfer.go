@@ -25,3 +25,31 @@ func (c *Client) Transfer(transferType, asset, amount, fromSymbol, toSymbol stri
 	_, err := service.Do(context.Background())
 	return err
 }
+
+func (c *Client) List(transferType string, startTime, endTime, current, size int64, fromSymbol, toSymbol string) (UniversalTransferList, error) {
+	service := binance.NewClient(c.ApiKey, c.ApiSecret).NewListUserUniversalTransferService()
+	service.Type(binance.UserUniversalTransferType(transferType))
+	if startTime != 0 {
+		service.StartTime(startTime)
+	}
+	if endTime != 0 {
+		service.EndTime(endTime)
+	}
+	if current != 0 {
+		service.Current(int(current))
+	}
+	if size != 0 {
+		service.Size(int(size))
+	}
+	if fromSymbol != "" {
+		service.FromSymbol(fromSymbol)
+	}
+	if toSymbol != "" {
+		service.ToSymbol(toSymbol)
+	}
+	resp, err := service.Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	return UniversalTransferList(resp.Results), nil
+}
