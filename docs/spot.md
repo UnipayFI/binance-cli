@@ -4,6 +4,9 @@
 - [Account](#account--show-account-info)
 - [Asset](#asset---show-account-assets)
 - [Dividend](#dividend---query-asset-dividend-record)
+- [Fee](#fee)
+  - [Get BNB Burn Status](#fee---get-bnb-burn-status)
+  - [Set BNB Burn Status](#fee---set-bnb-burn-status)
 - [Order](#order)
   - [Create Market Order](#order---create-market-order)
   - [Create Limit Order](#order---create-limit-order)
@@ -48,6 +51,20 @@ Exec: `./binance-cli spot dividend ls`
 │ 4651975355145888522 │ USDT  │ 116.2712 │ 2025-08-15 06:02:18 │ BFUSD Daily reward │ 286330628796   │
 │ 4650581332527448370 │ USDT  │ 147.4873 │ 2025-08-14 06:57:28 │ BFUSD Daily reward │ 285921655320   │
 └─────────────────────┴───────┴──────────┴─────────────────────┴────────────────────┴────────────────┘
+```
+
+
+## Fee
+### Fee - Get BNB Burn Status
+Exec: `./binance-cli spot fee status`
+```shell
+fee burn spotBNBBurn: true, interestBNBBurn: false
+```
+
+### Fee - Set BNB Burn Status
+Exec: `./binance-cli spot fee set --spotBNBBurn=true --interestBNBBurn=true`
+```shell
+fee burn spotBNBBurn: true, interestBNBBurn: true
 ```
 
 ## Order
