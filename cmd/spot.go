@@ -17,6 +17,5 @@ func init() {
 	SpotCmd.AddCommand(spot.InitAssetCmds()...)
 	SpotCmd.AddCommand(spot.InitDividendCmds()...)
 	SpotCmd.AddCommand(spot.InitOrderCmds()...)
-	SpotCmd.AddCommand(spot.InitFeeCmds()...)
 	RootCmd.AddCommand(SpotCmd)
 }

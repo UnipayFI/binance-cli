@@ -1,4 +1,4 @@
-package cmd
+package wallet
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/UnipayFI/binance-cli/config"
 	"github.com/UnipayFI/binance-cli/exchange"
-	universaltransfer "github.com/UnipayFI/binance-cli/exchange/universal_transfer"
+	"github.com/UnipayFI/binance-cli/exchange/wallet"
 	"github.com/UnipayFI/binance-cli/printer"
 	"github.com/spf13/cobra"
 )
@@ -52,7 +52,7 @@ Docs Link: https://developers.binance.com/docs/wallet/asset/user-universal-trans
 	}
 )
 
-func init() {
+func InitUniversalTransferCmds() []*cobra.Command {
 	universalTransferListCmd.Flags().String("type", "", "transfer type")
 	universalTransferListCmd.Flags().Int64("startTime", 0, "start time")
 	universalTransferListCmd.Flags().Int64("endTime", 0, "end time")
@@ -67,7 +67,7 @@ func init() {
 	transferCmd.Flags().String("fromSymbol", "", "from symbol")
 	transferCmd.Flags().String("toSymbol", "", "to symbol")
 	universalTransferCmd.AddCommand(universalTransferListCmd, transferCmd)
-	RootCmd.AddCommand(universalTransferCmd)
+	return []*cobra.Command{universalTransferCmd}
 }
 
 func universalTransferList(cmd *cobra.Command, args []string) {
@@ -79,7 +79,7 @@ func universalTransferList(cmd *cobra.Command, args []string) {
 	fromSymbol, _ := cmd.Flags().GetString("fromSymbol")
 	toSymbol, _ := cmd.Flags().GetString("toSymbol")
 
-	client := universaltransfer.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	client := wallet.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	list, err := client.List(transferType, startTime, endTime, current, size, fromSymbol, toSymbol)
 	if err != nil {
 		log.Fatal(err)
@@ -94,7 +94,7 @@ func universalTransfer(cmd *cobra.Command, args []string) {
 	fromSymbol, _ := cmd.Flags().GetString("fromSymbol")
 	toSymbol, _ := cmd.Flags().GetString("toSymbol")
 
-	client := universaltransfer.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
+	client := wallet.Client{Client: exchange.NewClient(config.Config.APIKey, config.Config.APISecret)}
 	err := client.Transfer(transferType, asset, amount, fromSymbol, toSymbol)
 	if err != nil {
 		log.Fatal(err)

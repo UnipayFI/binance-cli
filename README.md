@@ -21,11 +21,11 @@ All commands are to be used in the following format:
 ./binance-cli [Module] [Subcommand] [Arguments]
 
 Available Commands:
-  futures            Futures
-  help               Help about any command
-  portfolio          Portfolio
-  spot               Spot
-  universal-transfer Transfer asset and history
+  futures     Futures
+  help        Help about any command
+  portfolio   Portfolio
+  spot        Spot
+  wallet      Wallet
 ```
 
 ### Spot Module
@@ -79,6 +79,16 @@ Available Commands:
   order            Support create, cancel, list margin orders
 ```
 **[View detailed documentation](docs/portfolio_margin.md)**
+
+### Wallet Module
+Exec: `./binance-cli wallet [Subcommand] [Arguments]`
+```shell
+Available Commands:
+  dust               dust asset conversion and history
+  fee                BNB payment fee
+  universal-transfer Transfer asset and history
+```
+**[View detailed documentation](docs/wallet.md)**
 
 ## License
 UnipayFI/binance-cli is released under the [MIT License](https://opensource.org/licenses/MIT).

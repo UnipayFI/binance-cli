@@ -1,10 +1,15 @@
-package spot
+package wallet
 
 import (
 	"context"
 
+	"github.com/UnipayFI/binance-cli/exchange"
 	"github.com/adshao/go-binance/v2"
 )
+
+type Client struct {
+	*exchange.Client
+}
 
 func (c *Client) GetFeeBurnStatus() (binance.BNBBurn, error) {
 	service := binance.NewClient(c.ApiKey, c.ApiSecret).NewGetBNBBurnService()
