@@ -68,7 +68,7 @@ fee burn spotBNBBurn: true, interestBNBBurn: true
 Exec: `./binance-cli wallet universal-transfer --type={type} --asset={asset} --amount={x}`
 
 ### Universal-transfer - History
-Exec: `./binance-cli universal-transfer ls --type={type}`
+Exec: `./binance-cli wallet universal-transfer ls --type={type}`
 ```shell
 ┌───────┬────────┬───────────────────────┬───────────┬──────────────┬─────────────────────┐
 │ ASSET │ AMOUNT │         TYPE          │  STATUS   │   TRAN ID    │      TIMESTAMP      │
